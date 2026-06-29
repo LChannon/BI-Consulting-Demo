@@ -42,9 +42,10 @@ table Budget
 
 	partition Budget = m
 		mode: import
+		queryGroup: 'CSV Files'
 		source =
 				let
-				    Source = Csv.Document(File.Contents("C:\Users\LeeChannon\PyCharmProjects\DEMO\Power BI\KPI Switch\data\Budget.csv"),[Delimiter=",", Columns=4, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    Source = Csv.Document(File.Contents(FilePath & "\Budget.csv"),[Delimiter=",", Columns=4, Encoding=1252, QuoteStyle=QuoteStyle.None]),
 				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
 				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Date", type date}, {"Sales_Target", Int64.Type}, {"Units_Target", Int64.Type}, {"Margin_Target_Pct", type number}})
 				in

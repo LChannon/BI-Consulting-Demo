@@ -42,9 +42,10 @@ table Fact_Sales
 
 	partition Fact_Sales = m
 		mode: import
+		queryGroup: 'CSV Files'
 		source =
 				let
-				    Source = Csv.Document(File.Contents("C:\Users\LeeChannon\PyCharmProjects\DEMO\Power BI\KPI Switch\data\Fact_Sales.csv"),[Delimiter=",", Columns=4, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    Source = Csv.Document(File.Contents(FilePath & "\Fact_Sales.csv"),[Delimiter=",", Columns=4, Encoding=1252, QuoteStyle=QuoteStyle.None]),
 				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
 				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Date", type date}, {"Sales_Amount", Int64.Type}, {"Cost_Amount", type number}, {"Units_Sold", Int64.Type}})
 				in

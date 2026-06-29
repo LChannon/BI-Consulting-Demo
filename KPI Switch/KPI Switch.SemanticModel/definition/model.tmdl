@@ -6,9 +6,17 @@ model Model
 		legacyRedirects
 		returnErrorValuesAsNull
 
+queryGroup Parameters
+
+	annotation PBI_QueryGroupOrder = 0
+
+queryGroup 'CSV Files'
+
+	annotation PBI_QueryGroupOrder = 1
+
 annotation __PBI_TimeIntelligenceEnabled = 1
 
-annotation PBI_QueryOrder = ["Fact_Sales","Budget"]
+annotation PBI_QueryOrder = ["Fact_Sales","Budget","FilePath"]
 
 annotation PBI_ProTooling = ["DevMode"]
 
