@@ -1,0 +1,19 @@
+# Windows
+Thumbs.db
+desktop.ini
+
+# Mac
+.DS_Store
+
+# Power BI local settings
+*.pbix.lock
+
+# Environment files
+.env
+
+# Python cache if you ever add scripts
+__pycache__/
+*.pyc
+
+# Node if you ever add JS tools
+node_modules/
