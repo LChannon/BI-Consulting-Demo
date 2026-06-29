@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "KPI Switch"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "f66e362b-523f-43ae-a937-6ee7eb9f9d67"
+  }
+}

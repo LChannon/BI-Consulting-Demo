@@ -1,0 +1,256 @@
+table _Measures
+	lineageTag: 9ee1e421-7212-4163-8b53-66d98af2184d
+
+	measure 'Sales MTD' =
+			
+			CALCULATE(
+			    SUM(Fact_Sales[Sales_Amount]),
+			    DATESMTD(Dim_Date[Date])
+			)
+		formatString: 0
+		displayFolder: Actuals
+		lineageTag: b8315c42-2f0d-4ecd-a0f4-5833f776909b
+
+	measure 'Sales YTD' =
+			
+			CALCULATE(
+			    SUM(Fact_Sales[Sales_Amount]),
+			    DATESYTD(Dim_Date[Date])
+			)
+		formatString: 0
+		displayFolder: Actuals
+		lineageTag: d1bb39cf-a61d-4efe-890a-dffd5f29e1ed
+
+	measure 'Units MTD' =
+			
+			CALCULATE(
+			    SUM(Fact_Sales[Units_Sold]),
+			    DATESMTD(Dim_Date[Date])
+			)
+		formatString: 0
+		displayFolder: Actuals
+		lineageTag: 4e6f16b0-269c-48a5-8354-93d43be36f5a
+
+	measure 'Units YTD' =
+			
+			CALCULATE(
+			    SUM(Fact_Sales[Units_Sold]),
+			    DATESYTD(Dim_Date[Date])
+			)
+		formatString: 0
+		displayFolder: Actuals
+		lineageTag: 33f11f18-ce63-498f-af1a-c96f76209123
+
+	measure 'Margin MTD' =
+			
+			DIVIDE(
+			    CALCULATE(SUM(Fact_Sales[Sales_Amount]) - SUM(Fact_Sales[Cost_Amount]), DATESMTD(Dim_Date[Date])),
+			    CALCULATE(SUM(Fact_Sales[Sales_Amount]), DATESMTD(Dim_Date[Date]))
+			)
+		displayFolder: Actuals
+		lineageTag: 2f7d9ea5-29f1-4f5c-9502-6ba7ca598d6d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Margin YTD' =
+			
+			DIVIDE(
+			    CALCULATE(SUM(Fact_Sales[Sales_Amount]) - SUM(Fact_Sales[Cost_Amount]), DATESYTD(Dim_Date[Date])),
+			    CALCULATE(SUM(Fact_Sales[Sales_Amount]), DATESYTD(Dim_Date[Date]))
+			)
+		displayFolder: Actuals
+		lineageTag: becfbcf2-7d29-472d-8b89-26a4ce2a0267
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'AOV MTD' =
+			
+			DIVIDE(
+			    CALCULATE(SUM(Fact_Sales[Sales_Amount]), DATESMTD(Dim_Date[Date])),
+			    CALCULATE(SUM(Fact_Sales[Units_Sold]), DATESMTD(Dim_Date[Date]))
+			)
+		displayFolder: Actuals
+		lineageTag: 1da6c9b2-d821-4d57-a6cf-6112f2dcc1ba
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'AOV YTD' =
+			
+			DIVIDE(
+			    CALCULATE(SUM(Fact_Sales[Sales_Amount]), DATESYTD(Dim_Date[Date])),
+			    CALCULATE(SUM(Fact_Sales[Units_Sold]), DATESYTD(Dim_Date[Date]))
+			)
+		displayFolder: Actuals
+		lineageTag: 5d3da8b8-83e0-4fab-96df-721e0eecb403
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Sales Target MTD' =
+			
+			CALCULATE(
+			    SUM(Budget[Sales_Target]),
+			    DATESMTD(Dim_Date[Date])
+			)
+		formatString: 0
+		displayFolder: Targets
+		lineageTag: e62cd018-6bc6-4406-80bc-bea265507ec8
+
+	measure 'Sales Target YTD' =
+			
+			CALCULATE(
+			    SUM(Budget[Sales_Target]),
+			    DATESYTD(Dim_Date[Date])
+			)
+		formatString: 0
+		displayFolder: Targets
+		lineageTag: acda8dfb-99b6-40a5-9899-97d1c183e435
+
+	measure 'Units Target MTD' =
+			
+			CALCULATE(
+			    SUM(Budget[Units_Target]),
+			    DATESMTD(Dim_Date[Date])
+			)
+		formatString: 0
+		displayFolder: Targets
+		lineageTag: 6f6e0c0d-116c-4962-aeec-3bbb1c20cf53
+
+	measure 'Units Target YTD' =
+			
+			CALCULATE(
+			    SUM(Budget[Units_Target]),
+			    DATESYTD(Dim_Date[Date])
+			)
+		formatString: 0
+		displayFolder: Targets
+		lineageTag: 80614a9e-f0ab-4746-85ae-510ccbbdb23d
+
+	measure 'Margin Target MTD' =
+			
+			CALCULATE(
+			    AVERAGE(Budget[Margin_Target_Pct]),
+			    DATESMTD(Dim_Date[Date])
+			)
+		displayFolder: Targets
+		lineageTag: e439a9dd-9af3-4f39-acb0-57c5b3400758
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Margin Target YTD' =
+			
+			CALCULATE(
+			    AVERAGE(Budget[Margin_Target_Pct]),
+			    DATESYTD(Dim_Date[Date])
+			)
+		displayFolder: Targets
+		lineageTag: 59a246b9-6d6d-4c9f-96fb-446360e550ad
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'KPI Display' =
+			
+			VAR SelectedMeasure = SELECTEDVALUE(KPI_Rows[Measure_Name])
+			VAR SelectedColumn = SELECTEDVALUE(KPI_Columns[Column_Name])
+			RETURN
+			    SWITCH(
+			        TRUE(),
+			        SelectedMeasure = "Total Sales $" && SelectedColumn = "MTD Actual", FORMAT([Sales MTD], "$#,##0"),
+			        SelectedMeasure = "Total Sales $" && SelectedColumn = "MTD Target", FORMAT([Sales Target MTD], "$#,##0"),
+			        SelectedMeasure = "Total Sales $" && SelectedColumn = "YTD Actual", FORMAT([Sales YTD], "$#,##0"),
+			        SelectedMeasure = "Total Sales $" && SelectedColumn = "YTD Target", FORMAT([Sales Target YTD], "$#,##0"),
+			
+			        SelectedMeasure = "Units Sold" && SelectedColumn = "MTD Actual", FORMAT([Units MTD], "#,##0"),
+			        SelectedMeasure = "Units Sold" && SelectedColumn = "MTD Target", FORMAT([Units Target MTD], "#,##0"),
+			        SelectedMeasure = "Units Sold" && SelectedColumn = "YTD Actual", FORMAT([Units YTD], "#,##0"),
+			        SelectedMeasure = "Units Sold" && SelectedColumn = "YTD Target", FORMAT([Units Target YTD], "#,##0"),
+			
+			        SelectedMeasure = "Gross Margin %" && SelectedColumn = "MTD Actual", FORMAT([Margin MTD], "0.0%"),
+			        SelectedMeasure = "Gross Margin %" && SelectedColumn = "MTD Target", FORMAT([Margin Target MTD], "0.0%"),
+			        SelectedMeasure = "Gross Margin %" && SelectedColumn = "YTD Actual", FORMAT([Margin YTD], "0.0%"),
+			        SelectedMeasure = "Gross Margin %" && SelectedColumn = "YTD Target", FORMAT([Margin Target YTD], "0.0%"),
+			
+			        SelectedMeasure = "Avg Order Value" && SelectedColumn = "MTD Actual", FORMAT([AOV MTD], "$#,##0.00"),
+			        SelectedMeasure = "Avg Order Value" && SelectedColumn = "YTD Actual", FORMAT([AOV YTD], "$#,##0.00"),
+			
+			        BLANK()
+			    )
+		lineageTag: e7c277a2-f266-4d72-b697-2cf4adebc259
+
+	measure 'CF Sales' =
+			
+			VAR ACT = [Sales MTD]
+			VAR TGT = [Sales Target MTD]
+			RETURN
+			    IF(
+			        ISBLANK(ACT) || ISBLANK(TGT),
+			        BLANK(),
+			        SIGN(ACT - TGT)
+			    )
+		formatString: 0
+		displayFolder: Formatting
+		lineageTag: 8736739d-732f-4a40-8aba-88865400b509
+
+	measure 'CF Units' =
+			
+			VAR ACT = [Units MTD]
+			VAR TGT = [Units Target MTD]
+			RETURN
+			    IF(
+			        ISBLANK(ACT) || ISBLANK(TGT),
+			        BLANK(),
+			        SIGN(ACT - TGT)
+			    )
+		formatString: 0
+		displayFolder: Formatting
+		lineageTag: 19baf640-bce0-4b4f-bc18-0e4c6bdd7582
+
+	measure 'CF Margin' =
+			
+			VAR ACT = [Margin MTD]
+			VAR TGT = [Margin Target MTD]
+			RETURN
+			    IF(
+			        ISBLANK(ACT) || ISBLANK(TGT),
+			        BLANK(),
+			        SIGN(ACT - TGT)
+			    )
+		formatString: 0
+		displayFolder: Formatting
+		lineageTag: b25180b6-309a-42a7-a655-d212940c9f1f
+
+	measure 'CF Display' =
+			
+			VAR SelectedMeasure = SELECTEDVALUE(KPI_Rows[Measure_Name])
+			VAR SelectedColumn = SELECTEDVALUE(KPI_Columns[Column_Name])
+			RETURN
+			    SWITCH(
+			        TRUE(),
+			        SelectedMeasure = "Total Sales $" && SelectedColumn = "MTD Actual", [CF Sales],
+			        SelectedMeasure = "Total Sales $" && SelectedColumn = "YTD Actual", SIGN([Sales YTD] - [Sales Target YTD]),
+			
+			        SelectedMeasure = "Units Sold" && SelectedColumn = "MTD Actual", [CF Units],
+			        SelectedMeasure = "Units Sold" && SelectedColumn = "YTD Actual", SIGN([Units YTD] - [Units Target YTD]),
+			
+			        SelectedMeasure = "Gross Margin %" && SelectedColumn = "MTD Actual", [CF Margin],
+			        SelectedMeasure = "Gross Margin %" && SelectedColumn = "YTD Actual", SIGN([Margin YTD] - [Margin Target YTD]),
+			
+			        BLANK()
+			    )
+		formatString: 0
+		lineageTag: 1212261d-2c0a-4c9f-b20f-67e3303e1dd3
+
+	column Placeholder
+		isHidden
+		lineageTag: fdfeacd8-177e-4d08-84fe-212ee50bd1a9
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Placeholder]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _Measures = calculated
+		mode: import
+		source = DATATABLE("Placeholder", STRING, {{""}})
+
+	annotation PBI_Id = ac3e38391f3540dcbffb7f28c2411f34
+

@@ -1,0 +1,56 @@
+table Fact_Sales
+	lineageTag: 25e80b7d-9d75-4e75-9957-b7a8b5bb8519
+
+	column Date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 8f385e78-0790-4e25-bbe6-78461a5f78dd
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Sales_Amount
+		dataType: int64
+		formatString: 0
+		lineageTag: d6975ee6-1479-43aa-a2e2-24e3113e6adc
+		summarizeBy: sum
+		sourceColumn: Sales_Amount
+
+		annotation SummarizationSetBy = Automatic
+
+	column Cost_Amount
+		dataType: double
+		lineageTag: 31abd60b-13a7-476b-aa2b-7cd6adaf7abc
+		summarizeBy: sum
+		sourceColumn: Cost_Amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Units_Sold
+		dataType: int64
+		formatString: 0
+		lineageTag: 6235adaf-e7cc-4bba-972f-fd895aedd7ca
+		summarizeBy: sum
+		sourceColumn: Units_Sold
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Fact_Sales = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Users\LeeChannon\PyCharmProjects\DEMO\Power BI\KPI Switch\data\Fact_Sales.csv"),[Delimiter=",", Columns=4, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Date", type date}, {"Sales_Amount", Int64.Type}, {"Cost_Amount", type number}, {"Units_Sold", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

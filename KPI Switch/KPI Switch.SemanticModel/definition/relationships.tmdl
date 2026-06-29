@@ -1,0 +1,18 @@
+relationship 97373ed9-8619-4199-8605-5bb448e76ae1
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Dim_Date.Start_Of_Month
+	toColumn: LocalDateTable_0ceb80ca-3f0e-4995-8d76-15bb414bfe90.Date
+
+relationship 6a7e7c19-9dcf-4ceb-a587-08b63a6d127c
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Dim_Date.Date
+	toColumn: LocalDateTable_e1309d84-d022-4d47-8e29-e4ccb68ab274.Date
+
+relationship d47a6f78-fb79-5757-104f-6441f7614710
+	fromColumn: Fact_Sales.Date
+	toColumn: Dim_Date.Date
+
+relationship b63c884a-1ab6-db50-8946-1dad5d268f85
+	fromColumn: Budget.Date
+	toColumn: Dim_Date.Date
+

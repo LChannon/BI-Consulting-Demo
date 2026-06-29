@@ -1,0 +1,70 @@
+table Dim_Date
+	lineageTag: 43bfea76-5b6f-4038-94f2-e4157f6d277a
+
+	column Date
+		formatString: General Date
+		lineageTag: 87cad8c3-9942-429d-87bf-ecbf57df86fd
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+		variation Variation
+			isDefault
+			relationship: 6a7e7c19-9dcf-4ceb-a587-08b63a6d127c
+			defaultHierarchy: LocalDateTable_e1309d84-d022-4d47-8e29-e4ccb68ab274.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year = YEAR(Dim_Date[Date])
+		formatString: 0
+		lineageTag: c54a9b40-058c-40bd-a7fc-60743509bfca
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month_Number = MONTH(Dim_Date[Date])
+		formatString: 0
+		lineageTag: ef0c4179-0aac-41a8-b188-64ec6d43198c
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month_Name = FORMAT(Dim_Date[Date], "MMMM")
+		lineageTag: aa8a1394-2c74-47fc-bbec-7fce55de193f
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month_Short = FORMAT(Dim_Date[Date], "MMM")
+		lineageTag: 1ff165d1-6703-42c9-bd76-3c83bf37c96c
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month_Year = FORMAT(Dim_Date[Date], "MMM YYYY")
+		lineageTag: a422f44e-b560-446d-a2c7-fd5c0f45574f
+		summarizeBy: none
+		sortByColumn: Month_Number
+
+		annotation SummarizationSetBy = Automatic
+
+	column Start_Of_Month = DATE(YEAR(Dim_Date[Date]), MONTH(Dim_Date[Date]), 1)
+		formatString: General Date
+		lineageTag: 175d1e68-8311-448a-a358-5f202ed362d8
+		summarizeBy: none
+
+		variation Variation
+			isDefault
+			relationship: 97373ed9-8619-4199-8605-5bb448e76ae1
+			defaultHierarchy: LocalDateTable_0ceb80ca-3f0e-4995-8d76-15bb414bfe90.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Date = calculated
+		mode: import
+		source =
+				
+				CALENDAR(DATE(2025,1,1), DATE(2025,3,31))
+
+	annotation PBI_Id = e7974e895e59450d9b4eb31322ef1919
+

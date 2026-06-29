@@ -1,0 +1,38 @@
+table KPI_Rows
+	lineageTag: f98c685f-f049-49fc-a035-661c537d718c
+
+	column Measure_Name
+		lineageTag: 202f5b17-9b7d-4d86-a83c-bb269adaf069
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Measure_Name]
+		sortByColumn: Sort_Order
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sort_Order
+		formatString: 0
+		lineageTag: 6366cab0-b03e-4989-a473-020b686e375e
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Sort_Order]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition KPI_Rows = calculated
+		mode: import
+		source =
+				
+				DATATABLE(
+				    "Measure_Name", STRING,
+				    "Sort_Order", INTEGER,
+				    {
+				        {"Total Sales $", 1},
+				        {"Units Sold", 2},
+				        {"Gross Margin %", 3},
+				        {"Avg Order Value", 4}
+				    }
+				)
+
+	annotation PBI_Id = 7179ec78b33649cc916e5dee22460309
+

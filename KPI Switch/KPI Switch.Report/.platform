@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "KPI Switch"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "12c55791-67dc-47fe-9c38-245356620a58"
+  }
+}

@@ -1,0 +1,38 @@
+table KPI_Columns
+	lineageTag: 4938abfd-3626-492d-be50-57c4e2f7134c
+
+	column Column_Name
+		lineageTag: 38cab59f-4c2e-4a19-bcd1-b0d1fca4aecf
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Column_Name]
+		sortByColumn: Sort_Order
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sort_Order
+		formatString: 0
+		lineageTag: 66603cc6-515a-496b-9fcf-ae7ae626158b
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Sort_Order]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition KPI_Columns = calculated
+		mode: import
+		source =
+				
+				DATATABLE(
+				    "Column_Name", STRING,
+				    "Sort_Order", INTEGER,
+				    {
+				        {"MTD Actual", 1},
+				        {"MTD Target", 2},
+				        {"YTD Actual", 3},
+				        {"YTD Target", 4}
+				    }
+				)
+
+	annotation PBI_Id = f45a758b58aa4e18984f5751969d9b1d
+

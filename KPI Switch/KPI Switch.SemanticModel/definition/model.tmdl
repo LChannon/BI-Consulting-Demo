@@ -1,0 +1,26 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-NZ
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["Fact_Sales","Budget"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table Fact_Sales
+ref table DateTableTemplate_106e4c5e-429a-454d-a4ae-2a1498abf537
+ref table Budget
+ref table Dim_Date
+ref table LocalDateTable_0ceb80ca-3f0e-4995-8d76-15bb414bfe90
+ref table LocalDateTable_e1309d84-d022-4d47-8e29-e4ccb68ab274
+ref table KPI_Rows
+ref table KPI_Columns
+ref table _Measures
+
+ref cultureInfo en-US
+
