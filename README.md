@@ -6,6 +6,8 @@ Each folder contains everything you need to follow along with the article - samp
 
 **Author:** Lee Channon (https://www.linkedin.com/in/lee-channon/)
 
+**Company:** Montage Business Intelligence Limited (https://www.linkedin.com/company/montage-business-intelligence-limited)
+
 ---
 
 ## Articles
