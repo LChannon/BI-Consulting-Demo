@@ -1,6 +1,6 @@
 # Power BI Article Demos
 
-Demo files and sample data to accompany my Power BI article series on LinkedIn.
+Demo files and sample data to accompany Power BI articles for LinkedIn.
 
 Each folder contains everything you need to follow along with the article - sample data, and a completed Power BI file with all measures and formatting in place.
 
