@@ -1,0 +1,47 @@
+table Dim_Channel
+	lineageTag: e591547a-ea4c-4c12-a488-b4d6098b88cf
+
+	column Channel_Key
+		dataType: int64
+		formatString: 0
+		lineageTag: 5f188aa0-5fb6-43fe-807c-70b3cfdfa618
+		summarizeBy: none
+		sourceColumn: Channel_Key
+
+		annotation SummarizationSetBy = Automatic
+
+	column Channel_Name
+		dataType: string
+		lineageTag: a68ade7b-e893-4804-a3ec-ec0ef680be57
+		summarizeBy: none
+		sourceColumn: Channel_Name
+		sortByColumn: Sort_Order
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sort_Order
+		dataType: int64
+		formatString: 0
+		lineageTag: ee4aa717-ce6e-4a40-bd37-0e18e6333364
+		summarizeBy: sum
+		sourceColumn: Sort_Order
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Channel = m
+		mode: import
+		queryGroup: 'CSV Files'
+		source =
+				let
+				    Source = Csv.Document(File.Contents(FilePath & "\Dim_Channel.csv"),[Delimiter=",", Columns=3, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Channel_Key", Int64.Type}, {"Channel_Name", type text}, {"Sort_Order", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

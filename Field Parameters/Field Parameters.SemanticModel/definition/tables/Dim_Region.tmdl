@@ -1,0 +1,47 @@
+table Dim_Region
+	lineageTag: f7081fc3-7907-4393-a704-cc762cca8bfb
+
+	column Region_Key
+		dataType: int64
+		formatString: 0
+		lineageTag: 9f77675f-d687-4f13-9923-9c51df11f1aa
+		summarizeBy: none
+		sourceColumn: Region_Key
+
+		annotation SummarizationSetBy = Automatic
+
+	column Region_Name
+		dataType: string
+		lineageTag: 664d3887-ea2d-45fd-a0ef-14d23d7f5fbb
+		summarizeBy: none
+		sourceColumn: Region_Name
+		sortByColumn: Sort_Order
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sort_Order
+		dataType: int64
+		formatString: 0
+		lineageTag: 5c6937be-b733-474e-8a32-448b0ef44d59
+		summarizeBy: sum
+		sourceColumn: Sort_Order
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Region = m
+		mode: import
+		queryGroup: 'CSV Files'
+		source =
+				let
+				    Source = Csv.Document(File.Contents(FilePath & "\Dim_Region.csv"),[Delimiter=",", Columns=3, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Region_Key", Int64.Type}, {"Region_Name", type text}, {"Sort_Order", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

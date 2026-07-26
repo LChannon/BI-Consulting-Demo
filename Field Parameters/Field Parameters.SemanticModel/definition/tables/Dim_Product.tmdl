@@ -1,0 +1,47 @@
+table Dim_Product
+	lineageTag: cc33af50-6840-4595-9243-2c1bfc713ae8
+
+	column Product_Key
+		dataType: int64
+		formatString: 0
+		lineageTag: bf61da80-2f6b-490e-bd74-b483e0749f7c
+		summarizeBy: none
+		sourceColumn: Product_Key
+
+		annotation SummarizationSetBy = Automatic
+
+	column Product_Category
+		dataType: string
+		lineageTag: 3a8ed03d-13e6-488a-9a5a-10e345dad635
+		summarizeBy: none
+		sourceColumn: Product_Category
+		sortByColumn: Sort_Order
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sort_Order
+		dataType: int64
+		formatString: 0
+		lineageTag: 2c3c7b0a-04c5-4ef3-82ee-9cf271479870
+		summarizeBy: sum
+		sourceColumn: Sort_Order
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Product = m
+		mode: import
+		queryGroup: 'CSV Files'
+		source =
+				let
+				    Source = Csv.Document(File.Contents(FilePath & "\Dim_Product.csv"),[Delimiter=",", Columns=3, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Product_Key", Int64.Type}, {"Product_Category", type text}, {"Sort_Order", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

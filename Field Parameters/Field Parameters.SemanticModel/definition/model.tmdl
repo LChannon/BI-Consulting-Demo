@@ -1,0 +1,35 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-NZ
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+queryGroup Parameters
+
+	annotation PBI_QueryGroupOrder = 0
+
+queryGroup 'CSV Files'
+
+	annotation PBI_QueryGroupOrder = 1
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["Fact_Sales","Fact_Budget","FilePath","Dim_Region","Dim_Product","Dim_Channel"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table Fact_Sales
+ref table DateTableTemplate_106e4c5e-429a-454d-a4ae-2a1498abf537
+ref table Fact_Budget
+ref table Dim_Date
+ref table LocalDateTable_0ceb80ca-3f0e-4995-8d76-15bb414bfe90
+ref table _Measures
+ref table Dim_Region
+ref table Dim_Product
+ref table Dim_Channel
+ref table LocalDateTable_e1309d84-d022-4d47-8e29-e4ccb68ab274
+
+ref cultureInfo en-US
+

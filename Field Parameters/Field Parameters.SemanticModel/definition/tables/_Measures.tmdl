@@ -1,0 +1,43 @@
+table _Measures
+	lineageTag: 9ee1e421-7212-4163-8b53-66d98af2184d
+
+	measure Revenue = SUM(Fact_Sales[Sales_Amount])
+		formatString: \$#,0;(\$#,0);\$#,0
+		displayFolder: Actuals
+		lineageTag: b8315c42-2f0d-4ecd-a0f4-5833f776909b
+
+	measure Budget = SUM(Fact_Budget[Budget_Amount])
+		formatString: \$#,0;(\$#,0);\$#,0
+		displayFolder: Targets
+		lineageTag: e62cd018-6bc6-4406-80bc-bea265507ec8
+
+	measure Units = SUM(Fact_Sales[Quantity])
+		formatString: #,0
+		displayFolder: Actuals
+		lineageTag: a8879867-da84-4635-a937-bf8fdd1f7912
+
+	measure 'Margin %' =
+			
+			DIVIDE(
+			    SUM(Fact_Sales[Sales_Amount]) - SUM(Fact_Sales[Cost_Amount]),
+			    SUM(Fact_Sales[Sales_Amount])
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Actuals
+		lineageTag: e13de1b8-346a-4938-ae5a-6c759fe983bb
+
+	column Placeholder
+		isHidden
+		lineageTag: fdfeacd8-177e-4d08-84fe-212ee50bd1a9
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Placeholder]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _Measures = calculated
+		mode: import
+		source = DATATABLE("Placeholder", STRING, {{""}})
+
+	annotation PBI_Id = ac3e38391f3540dcbffb7f28c2411f34
+

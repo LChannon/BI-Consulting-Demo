@@ -1,0 +1,42 @@
+relationship 97373ed9-8619-4199-8605-5bb448e76ae1
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Dim_Date.Start_Of_Month
+	toColumn: LocalDateTable_0ceb80ca-3f0e-4995-8d76-15bb414bfe90.Date
+
+relationship AutoDetected_8d5db1a3-803d-4f6f-84ac-181107d9778d
+	fromColumn: Fact_Sales.Region_Key
+	toColumn: Dim_Region.Region_Key
+
+relationship AutoDetected_74193029-3879-44b0-8d01-376bbd615a7f
+	fromColumn: Fact_Budget.Region_Key
+	toColumn: Dim_Region.Region_Key
+
+relationship AutoDetected_d82e389c-8a4f-4e94-a72c-290d6a5e2947
+	fromColumn: Fact_Sales.Product_Key
+	toColumn: Dim_Product.Product_Key
+
+relationship AutoDetected_ba4b1a1d-b2ce-454b-99a6-d82c19c07a4b
+	fromColumn: Fact_Budget.Product_Key
+	toColumn: Dim_Product.Product_Key
+
+relationship AutoDetected_8db9bc71-c009-4c2a-8481-cbb3e69ae027
+	fromColumn: Fact_Sales.Channel_Key
+	toColumn: Dim_Channel.Channel_Key
+
+relationship AutoDetected_7df87533-bb31-463b-bb4a-70d9708512c7
+	fromColumn: Fact_Budget.Channel_Key
+	toColumn: Dim_Channel.Channel_Key
+
+relationship a144825a-2058-4cae-b198-0b0190c4e596
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Dim_Date.Date
+	toColumn: LocalDateTable_e1309d84-d022-4d47-8e29-e4ccb68ab274.Date
+
+relationship d47a6f78-fb79-5757-104f-6441f7614710
+	fromColumn: Fact_Sales.Date
+	toColumn: Dim_Date.Date
+
+relationship ec549dc0-0e3b-8c61-1f0d-0aea8cc08538
+	fromColumn: Fact_Budget.Budget_Month
+	toColumn: Dim_Date.Date
+

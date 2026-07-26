@@ -1,0 +1,66 @@
+table Fact_Budget
+	lineageTag: a69c166d-df65-428c-97bd-64dd1e733732
+
+	column Budget_Month
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 7126820d-4e03-408b-b607-fc479211ae42
+		summarizeBy: none
+		sourceColumn: Budget_Month
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Region_Key
+		dataType: int64
+		formatString: 0
+		lineageTag: b43b1f3b-06ed-446e-ba62-669c304208d9
+		summarizeBy: none
+		sourceColumn: Region_Key
+
+		annotation SummarizationSetBy = Automatic
+
+	column Product_Key
+		dataType: int64
+		formatString: 0
+		lineageTag: cd77dfcd-f4ce-4809-bd35-661709bf03ba
+		summarizeBy: none
+		sourceColumn: Product_Key
+
+		annotation SummarizationSetBy = Automatic
+
+	column Channel_Key
+		dataType: int64
+		formatString: 0
+		lineageTag: 5b409530-df74-491a-8f24-9f7a0b5538e1
+		summarizeBy: none
+		sourceColumn: Channel_Key
+
+		annotation SummarizationSetBy = Automatic
+
+	column Budget_Amount
+		dataType: double
+		lineageTag: 4ff4bdea-ba9f-43e6-80cf-f0174a12e16c
+		summarizeBy: sum
+		sourceColumn: Budget_Amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition Fact_Budget = m
+		mode: import
+		queryGroup: 'CSV Files'
+		source =
+				let
+				    Source = Csv.Document(File.Contents(FilePath & "\Fact_Budget.csv"),[Delimiter=",", Columns=5, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Budget_Month", type date}, {"Region_Key", Int64.Type}, {"Product_Key", Int64.Type}, {"Channel_Key", Int64.Type}, {"Budget_Amount", type number}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
