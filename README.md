@@ -1,8 +1,8 @@
 # Power BI Article Demos
 
-Demo files and sample data to accompany Power BI articles for LinkedIn.
+Demo files and sample data to accompany Power BI stories on LinkedIn.
 
-Each folder contains everything you need to follow along with the article - sample data, and a completed Power BI file with all measures and formatting in place.
+Each article has its own folder containing everything you need to follow along: sample data, a completed Power BI project with all measures and formatting in place, and a focused README explaining that specific demo.
 
 **Author:** Lee Channon (https://www.linkedin.com/in/lee-channon/)
 
@@ -10,29 +10,28 @@ Each folder contains everything you need to follow along with the article - samp
 
 ---
 
-## Articles
+## How This Repo Is Organised
 
-### 01 - The KPI Matrix Problem Nobody Talks About in Power BI
+Each subfolder is a self contained demo for a single article and is named after its topic. Inside each you'll find:
 
-> [Read the article on LinkedIn](#) *(link to be added on publish)*
+- A `data` folder with the sample data used in the report
+- A Power BI project (`.pbip`) with its `.Report` and `.SemanticModel` folders
+- A `README.md` covering the files, setup, and key techniques for that article
 
-How to build a dynamic KPI matrix in Power BI that displays multiple measures as rows with MTD and YTD columns, each formatted differently per row, with conditional formatting driven by a single companion measure. Uses the SWITCH(TRUE()) pattern with two disconnected tables.
+New folders are added as articles are published, so the list grows over time. Open any folder's README to see what that demo covers.
 
-**Files**
-- `KPI_Matrix_Demo.pbix` - completed Power BI file with all measures, disconnected tables, and conditional formatting configured
-- `Fact_Sales.csv` - sample daily sales transactions for January through March 2025
-- `Budget.csv` - monthly sales targets for the same period
+## Getting Started
 
-**Setup**
-1. Load `Fact_Sales.csv` and `Budget.csv` into Power BI Desktop
-2. Create the `Dim_Date` calculated table using the DAX provided in the article
-3. Set relationships as shown in the article model diagram
-4. All measures and disconnected tables are pre-built in the PBIX file
+1. Clone or download this repo
+2. Open the `.pbip` file for the article you're interested in using Power BI Desktop
+3. Follow the steps in that folder's README
+
+The `.pbip` format stores the report and semantic model as plain files, so you can browse the model and report definitions directly in the folder as well as opening them in Power BI Desktop.
 
 ---
 
 ## About This Repo
 
-These files are provided for learning and reference purposes. Feel free to use and adapt them in your own work.
+These files are provided for learning and reference. Feel free to use and adapt them in your own work.
 
 See [LICENSE](LICENSE) for terms.

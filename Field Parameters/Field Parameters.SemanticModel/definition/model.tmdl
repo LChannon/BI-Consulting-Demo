@@ -30,6 +30,9 @@ ref table Dim_Region
 ref table Dim_Product
 ref table Dim_Channel
 ref table LocalDateTable_e1309d84-d022-4d47-8e29-e4ccb68ab274
+ref table 'View By'
+ref table Metric
+ref table Metric2
 
 ref cultureInfo en-US
 

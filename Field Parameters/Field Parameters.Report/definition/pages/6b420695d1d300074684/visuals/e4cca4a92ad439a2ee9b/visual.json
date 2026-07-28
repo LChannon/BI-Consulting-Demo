@@ -1,13 +1,13 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.8.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
   "name": "e4cca4a92ad439a2ee9b",
   "position": {
-    "x": 400,
-    "y": 75,
+    "x": 268.66995073891627,
+    "y": 75.369458128078819,
     "z": 3000,
-    "height": 75.590551181102356,
-    "width": 400,
-    "tabOrder": 4
+    "height": 75.369458128078819,
+    "width": 713.79310344827582,
+    "tabOrder": 3000
   },
   "visual": {
     "visualType": "textbox",
@@ -19,7 +19,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "KPI Report",
+                    "value": "Dimension Switcher",
                     "textStyle": {
                       "fontSize": "36pt",
                       "color": "#ffffff"

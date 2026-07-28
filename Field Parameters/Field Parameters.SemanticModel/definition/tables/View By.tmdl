@@ -1,0 +1,51 @@
+table 'View By'
+	isHidden
+	lineageTag: 2e3752d8-7fa6-484a-9faf-2ab7f8af998f
+
+	column 'View By'
+		isHidden
+		lineageTag: 67bdb5ce-ca39-4ad3-a635-78dc49f9a4b8
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'View By Order'
+
+		relatedColumnDetails
+			groupByColumn: 'View By Fields'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'View By Fields'
+		isHidden
+		lineageTag: 9b35c5ac-7916-468b-b8b3-4b6efbdb6ad9
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'View By Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'View By Order'
+		isHidden
+		formatString: 0
+		lineageTag: 3d427064-fd33-4e4f-8357-378af5da31ff
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'View By' = calculated
+		mode: import
+		source =
+				{
+				    ("Region", NAMEOF('Dim_Region'[Region_Name]), 0),
+				    ("Product", NAMEOF('Dim_Product'[Product_Category]), 1),
+				    ("Channel", NAMEOF('Dim_Channel'[Channel_Name]), 2)
+				}
+
+	annotation PBI_Id = d72827e1142942cb9cf2078f973c729c
+

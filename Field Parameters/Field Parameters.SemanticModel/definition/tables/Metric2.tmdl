@@ -1,0 +1,51 @@
+table Metric2
+	lineageTag: 896ff434-2048-4538-a811-61b6cccd3844
+
+	column Metric2
+		isHidden
+		lineageTag: b55a1186-c960-42e6-ba8d-97e36e0eedd8
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Metric2 Order'
+
+		relatedColumnDetails
+			groupByColumn: 'Metric2 Fields'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Metric2 Fields'
+		isHidden
+		lineageTag: f582ff24-810d-4468-99a1-f365be95340d
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Metric2 Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Metric2 Order'
+		isHidden
+		formatString: 0
+		lineageTag: d7775fff-cf62-4e21-8993-fc1ebbfc6793
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Metric2 = calculated
+		mode: import
+		source =
+				{
+				    ("Revenue", NAMEOF('_Measures'[Revenue]), 0),
+				    ("Units", NAMEOF('_Measures'[Units]), 1),
+				    ("Margin %", NAMEOF('_Measures'[Margin %]), 2),
+				    ("Budget", NAMEOF('_Measures'[Budget]), 3)
+				}
+
+	annotation PBI_Id = e9565efb3c884e5bb664947aca5638dc
+
