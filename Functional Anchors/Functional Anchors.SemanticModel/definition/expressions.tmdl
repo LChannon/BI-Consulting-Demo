@@ -1,0 +1,9 @@
+/// Enter the File Path where you have saved the source CSV files
+expression FilePath = "C:\Data\Demo" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: e35adaff-cf22-4da7-96d8-498be4b9f2af
+	queryGroup: Parameters
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Text
+

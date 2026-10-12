@@ -1,0 +1,42 @@
+table Dim_Country
+	lineageTag: a69c166d-df65-428c-97bd-64dd1e733732
+
+	column Country
+		dataType: string
+		lineageTag: e76446b9-f0e7-404e-b64f-764521600406
+		summarizeBy: none
+		sourceColumn: Country
+
+		annotation SummarizationSetBy = Automatic
+
+	column CountryCode
+		dataType: string
+		lineageTag: 58a82525-7885-48fe-b263-bedbcad0fcd5
+		summarizeBy: none
+		sourceColumn: CountryCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column Region
+		dataType: string
+		lineageTag: 77bbc611-1456-41b7-9b1e-202bde6c0450
+		summarizeBy: none
+		sourceColumn: Region
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Country = m
+		mode: import
+		queryGroup: 'CSV Files'
+		source =
+				let
+				    Source = Csv.Document(File.Contents(FilePath & "\Dim_Country.csv"),[Delimiter=",", Columns=3, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Country", type text}, {"CountryCode", type text}, {"Region", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

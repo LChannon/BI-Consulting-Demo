@@ -1,0 +1,14 @@
+function WindowedMeasure = ```
+		
+		    ( BaseMeasure: ANYREF EXPR, MonthsBack: INT64 VAL ) =>
+		    VAR MaxFactDate = CALCULATE ( MAX ( Imports[Date] ), ALL ( Dim_Date ) )
+		    VAR FDate = ENDOFMONTH ( Dim_Date[Date] )
+		    VAR Edate = EDATE ( FDate, MonthsBack )
+		    RETURN
+		        IF (
+		            MaxFactDate <= MAX ( Dim_Date[Date] ) && MaxFactDate > Edate,
+		            CALCULATE ( BaseMeasure, ALL ( Dim_Date ) )
+		        )
+		```
+	lineageTag: f62ef8df-1fa2-405f-9768-d359df2856ec
+

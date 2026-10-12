@@ -1,0 +1,136 @@
+table Imports
+	lineageTag: 72ac2b20-4d8d-49e0-9aa6-ce086014105e
+
+	measure 'KGs 24M' =
+			
+			VAR MaxFactDate =
+			    CALCULATE ( MAX ( Imports[Date] ), ALL ( Dim_Date ) )
+			VAR FDate =
+			    ENDOFMONTH ( Dim_Date[Date] )
+			VAR Edate =
+			    EDATE ( FDate, -24 )
+			RETURN
+			    IF (
+			MaxFactDate <= MAX ( Dim_Date[Date] )
+			&& MaxFactDate > Edate,
+			        CALCULATE ( Imports[KGs], ALL ( Dim_Date ) )
+			    )
+		formatString: #,0
+		lineageTag: 467131d5-d108-4fac-8f48-87cfbac1d36b
+
+	measure KGs = SUM(Imports[KG])
+		formatString: #,0
+		lineageTag: f2fa0280-0b71-4b01-ac72-e9e7854f3dfc
+
+	measure Dollars = SUM(Imports[Value])
+		formatString: #,0.00
+		lineageTag: 2119f243-3e08-44a7-a3d7-01f06b0204b5
+
+	measure 'Dollars per KG' = DIVIDE([Dollars],[KGs])
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: 45c8a87f-fae3-43c6-b04f-1e70b1d2352a
+
+	measure 'Dollars 50M' =
+			
+			VAR MaxFactDate =
+			    CALCULATE ( MAX ( Imports[Date] ), ALL ( Dim_Date ) )
+			VAR FDate =
+			    ENDOFMONTH ( Dim_Date[Date] )
+			VAR Edate =
+			    EDATE ( FDate, -50 )
+			RETURN
+			    IF (
+			MaxFactDate <= MAX ( Dim_Date[Date] )
+			&& MaxFactDate > Edate,
+			        CALCULATE ( Imports[Dollars], ALL ( Dim_Date ) )
+			    )
+		formatString: 0
+		lineageTag: f1550d62-a43e-47b2-aa39-44c2e95ebe6f
+
+	measure 'Dollar per KG 10Y' =
+			
+			VAR MaxFactDate =
+			    CALCULATE ( MAX ( Imports[Date] ), ALL ( Dim_Date ) )
+			VAR FDate =
+			    ENDOFMONTH ( Dim_Date[Date] )
+			VAR Edate =
+			    EDATE ( FDate, -120 )
+			RETURN
+			    IF (
+			MaxFactDate <= MAX ( Dim_Date[Date] )
+			&& MaxFactDate > Edate,
+			        CALCULATE ( Imports[Dollars per KG], ALL ( Dim_Date ) )
+			    )
+		lineageTag: 75d7869f-defe-465f-9c97-ae88aa31be6a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: ce8cf0fc-5661-42d4-8817-8ff7b6cef882
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Country
+		dataType: string
+		lineageTag: 5da5f6c9-6bb9-465c-b0a8-b6258a73ef01
+		summarizeBy: none
+		sourceColumn: Country
+
+		annotation SummarizationSetBy = Automatic
+
+	column KG
+		dataType: int64
+		formatString: 0
+		lineageTag: 41dab692-a3d6-4493-b471-c4dadf64c5e9
+		summarizeBy: sum
+		sourceColumn: KG
+
+		annotation SummarizationSetBy = Automatic
+
+	column Value
+		dataType: double
+		lineageTag: 2908be3b-c7a8-484a-aeb4-2edeb2f5a7fb
+		summarizeBy: sum
+		sourceColumn: Value
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column MonthName = RELATED(Dim_Date[Month_Year])
+		lineageTag: 5bb04abf-cdf7-4bfa-956b-e1def8578a56
+		summarizeBy: none
+		sortByColumn: MonthNo
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthNo = RELATED(Dim_Date[YYYYMM])
+		formatString: 0
+		lineageTag: 18063e78-497e-4ebf-bdb3-afa6b8323b06
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Imports = m
+		mode: import
+		queryGroup: 'CSV Files'
+		source =
+				let
+				    Source = Csv.Document(File.Contents(FilePath & "\Imports.csv"),[Delimiter=",", Columns=4, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Date", type date}, {"Country", type text}, {"KG", Int64.Type}, {"Value", type number}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

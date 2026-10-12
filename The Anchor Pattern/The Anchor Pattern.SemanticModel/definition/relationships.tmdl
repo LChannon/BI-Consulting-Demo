@@ -1,0 +1,18 @@
+relationship 97373ed9-8619-4199-8605-5bb448e76ae1
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Dim_Date.Start_Of_Month
+	toColumn: LocalDateTable_0ceb80ca-3f0e-4995-8d76-15bb414bfe90.Date
+
+relationship AutoDetected_6d1b981d-050b-45e6-abc5-8858dd57e433
+	fromColumn: Imports.Country
+	toColumn: Dim_Country.Country
+
+relationship 07f09013-5593-4861-9590-ec9157f09c11
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Dim_Date.Date
+	toColumn: LocalDateTable_e1309d84-d022-4d47-8e29-e4ccb68ab274.Date
+
+relationship 0b8f0cbb-a268-3520-a8b3-ff3133b4601d
+	fromColumn: Imports.Date
+	toColumn: Dim_Date.Date
+

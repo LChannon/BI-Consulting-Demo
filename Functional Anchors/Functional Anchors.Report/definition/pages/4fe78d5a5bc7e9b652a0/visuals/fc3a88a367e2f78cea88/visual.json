@@ -1,0 +1,131 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "fc3a88a367e2f78cea88",
+  "position": {
+    "x": 22.173228346456693,
+    "y": 150.17322834645668,
+    "z": 2000,
+    "height": 542.23622047244089,
+    "width": 1232.6299212598426,
+    "tabOrder": 2000
+  },
+  "visual": {
+    "visualType": "clusteredColumnChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Imports"
+                    }
+                  },
+                  "Property": "Date"
+                }
+              },
+              "queryRef": "Imports.Date",
+              "nativeQueryRef": "Date",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Imports"
+                    }
+                  },
+                  "Property": "KGs 10"
+                }
+              },
+              "queryRef": "Imports.KGs 10",
+              "nativeQueryRef": "KGs 10"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Imports"
+                    }
+                  },
+                  "Property": "KGs 15"
+                }
+              },
+              "queryRef": "Imports.KGs 15",
+              "nativeQueryRef": "KGs 15"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Imports"
+                    }
+                  },
+                  "Property": "KGs 20"
+                }
+              },
+              "queryRef": "Imports.KGs 20",
+              "nativeQueryRef": "KGs 20"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Imports"
+                  }
+                },
+                "Property": "Date"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'KG''s across different month lengths'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

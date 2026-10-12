@@ -1,0 +1,18 @@
+// Welcome to DAX query view! Learn more about DAX queries at https://aka.ms/dax-queries.
+// Right-click on tables, columns, or measures in the data pane to access quick queries, or ask Copilot for help writing DAX.
+
+// Select "Run" to try this sample DAX query.
+DEFINE
+    FUNCTION WindowedMeasure =
+    ( BaseMeasure: ANYREF EXPR, MonthsBack: INT64 VAL ) =>
+        VAR MaxFactDate = CALCULATE ( MAX ( Imports[Date] ), ALL ( Dim_Date ) )
+        VAR FDate = ENDOFMONTH ( Dim_Date[Date] )
+        VAR Edate = EDATE ( FDate, MonthsBack )
+        RETURN
+            IF (
+                MaxFactDate <= MAX ( Dim_Date[Date] ) && MaxFactDate > Edate,
+                BaseMeasure
+            )
+
+EVALUATE
+    { WindowedMeasure ( [KGs], -24 ) }
