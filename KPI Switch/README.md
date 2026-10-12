@@ -2,11 +2,11 @@
 
 > [Read the article on LinkedIn](#) *(link to be added on publish)*
 
-The demo for building a dynamic KPI matrix that displays multiple measures as rows with MTD and YTD columns, each row formatted differently, with conditional formatting driven by a single companion measure. It uses the `SWITCH(TRUE())` pattern with two disconnected tables.
+The demo for building a dynamic KPI matrix that displays multiple measures as rows against MTD and YTD columns, each row formatted differently and given its own conditional formatting from a single companion measure. It uses the `SWITCH(TRUE())` pattern with two disconnected tables.
 
 ## What This Demonstrates
 
-A standard matrix forces every value to share the same format string and the same conditional formatting rules. That falls apart the moment you want revenue as currency, margin as a percentage, and order count as a whole number in the same matrix. This demo shows how to break that constraint using:
+A standard matrix forces every value to share the same format string and the same conditional formatting rules. That breaks down the moment you want revenue as currency, margin as a percentage, and order count as a whole number in the same matrix. This demo shows how to break that constraint using:
 
 - Two disconnected tables to drive the rows (the measures) and the columns (the time periods)
 - A `SWITCH(TRUE())` measure that returns the right calculation for each row and column combination
