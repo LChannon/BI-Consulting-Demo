@@ -1,0 +1,7 @@
+GreenhouseCode,GreenhouseName,Site,AreaM2,PrimaryCrop,CommissionedDate
+GH01,North House 1,Home Block,4200,ROSE,2015-08-01
+GH02,North House 2,Home Block,4200,ROSE,2015-08-01
+GH03,South House,Home Block,3600,LILY,2017-03-01
+GH04,Long House,River Block,5000,CHRYSANTHEMUM,2018-10-01
+GH05,Glasshouse A,River Block,3000,GERBERA/LISIANTHUS,2020-06-01
+GH06,North House 3,Home Block,4500,ROSE,2025-07-14
