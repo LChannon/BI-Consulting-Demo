@@ -1,0 +1,89 @@
+/// Staff dimension for pickers, packers and supervisors. Key: StaffID
+table Dim_Staff
+	lineageTag: 71f333b6-b997-4ad8-836e-540a48f714d1
+
+	column StaffID
+		dataType: string
+		isKey
+		lineageTag: 0ea93eab-5f2c-4829-9505-c714ea701e23
+		summarizeBy: none
+		sourceColumn: StaffID
+
+		annotation SummarizationSetBy = Automatic
+
+	column StaffName
+		dataType: string
+		lineageTag: 482b7ccc-f6de-4ce1-8770-98a896d80872
+		summarizeBy: none
+		sourceColumn: StaffName
+
+		annotation SummarizationSetBy = Automatic
+
+	column FirstName
+		dataType: string
+		lineageTag: 485c6c6b-e1ca-44d3-8b79-80f48c87dbc9
+		summarizeBy: none
+		sourceColumn: FirstName
+
+		annotation SummarizationSetBy = Automatic
+
+	column LastName
+		dataType: string
+		lineageTag: 337083f4-1588-4d74-8bf6-7ac3f2cd7fbb
+		summarizeBy: none
+		sourceColumn: LastName
+
+		annotation SummarizationSetBy = Automatic
+
+	column Role
+		dataType: string
+		lineageTag: b06e653c-b738-4972-9b60-152d0d5aa8ba
+		summarizeBy: none
+		sourceColumn: Role
+
+		annotation SummarizationSetBy = Automatic
+
+	column EmploymentType
+		dataType: string
+		lineageTag: 6611e3d7-c804-4dda-8b79-a1539bf01e54
+		summarizeBy: none
+		sourceColumn: EmploymentType
+
+		annotation SummarizationSetBy = Automatic
+
+	column StartDate
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 3233b064-a363-4e54-8b82-ec93728498b5
+		summarizeBy: none
+		sourceColumn: StartDate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column EndDate
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: f53a296c-dc68-48d4-8e23-8b1fdf065177
+		summarizeBy: none
+		sourceColumn: EndDate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	partition Dim_Staff = m
+		mode: import
+		queryGroup: 'Report Tables'
+		source =
+				let
+				    Source = stg_Staff,
+				    StaffName = Table.AddColumn(Source, "StaffName", each [FirstName] & " " & [LastName], type text),
+				    Reordered = Table.SelectColumns(StaffName, {"StaffID", "StaffName", "FirstName", "LastName", "Role",
+				        "EmploymentType", "StartDate", "EndDate"})
+				in
+				    Reordered
+
+	annotation PBI_ResultType = Table
+

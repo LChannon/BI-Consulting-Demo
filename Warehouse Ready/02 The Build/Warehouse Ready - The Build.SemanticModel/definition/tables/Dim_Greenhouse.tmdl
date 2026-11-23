@@ -1,0 +1,68 @@
+/// Greenhouse dimension. Key: GreenhouseCode
+table Dim_Greenhouse
+	lineageTag: 036ccd93-73eb-494e-96a6-5eb56404ebee
+
+	column GreenhouseCode
+		dataType: string
+		isKey
+		lineageTag: 962f26ac-6d49-4ff4-bc3b-e6b0d55bad62
+		summarizeBy: none
+		sourceColumn: GreenhouseCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column GreenhouseName
+		dataType: string
+		lineageTag: c178fa20-0122-4879-9a60-6d6a2bf44808
+		summarizeBy: none
+		sourceColumn: GreenhouseName
+
+		annotation SummarizationSetBy = Automatic
+
+	column Site
+		dataType: string
+		lineageTag: f1528c0d-a5ec-4997-abdc-7cc0c9eedad8
+		summarizeBy: none
+		sourceColumn: Site
+
+		annotation SummarizationSetBy = Automatic
+
+	column AreaM2
+		dataType: int64
+		formatString: 0
+		lineageTag: 0c184c54-4a5a-42be-bb08-5e0000a7af5d
+		summarizeBy: none
+		sourceColumn: AreaM2
+
+		annotation SummarizationSetBy = Automatic
+
+	column PrimaryCrop
+		dataType: string
+		lineageTag: 3bb13771-4ed7-44c0-9e7a-67236a2d65cd
+		summarizeBy: none
+		sourceColumn: PrimaryCrop
+
+		annotation SummarizationSetBy = Automatic
+
+	column CommissionedDate
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: f7c15eca-ae84-4c7e-9681-e47bb16b725e
+		summarizeBy: none
+		sourceColumn: CommissionedDate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	partition Dim_Greenhouse = m
+		mode: import
+		queryGroup: 'Report Tables'
+		source =
+				let
+				    Source = stg_Greenhouses
+				in
+				    Source
+
+	annotation PBI_ResultType = Table
+

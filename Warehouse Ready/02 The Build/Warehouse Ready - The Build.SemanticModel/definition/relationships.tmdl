@@ -1,0 +1,36 @@
+relationship c59805d3-206b-4fc8-be8b-27b79eb41381
+	fromColumn: Fact_Sales.OrderDate
+	toColumn: Dim_Date.Date
+
+relationship 9dfd915c-cbce-4cc0-b97f-20081e5e6f86
+	fromColumn: Fact_Sales.CustomerCode
+	toColumn: Dim_Customer.CustomerCode
+
+relationship 9a1b665c-ece3-4472-8df2-b61ff3b5583c
+	fromColumn: Fact_Sales.ItemCode
+	toColumn: Dim_Product.ItemCode
+
+relationship 4a35548a-92c0-4c73-b3ec-35c03528fd33
+	fromColumn: Fact_Harvest.HarvestDate
+	toColumn: Dim_Date.Date
+
+relationship b69f95f1-e180-40aa-9b93-fdeee026077b
+	fromColumn: Fact_Harvest.StaffID
+	toColumn: Dim_Staff.StaffID
+
+relationship 32a60c73-45c1-4d51-af76-b850d974bd56
+	fromColumn: Fact_Harvest.GreenhouseCode
+	toColumn: Dim_Greenhouse.GreenhouseCode
+
+relationship a3b7c2cf-35ca-4265-8558-365c3fbf4566
+	fromColumn: Fact_Harvest.ItemCode
+	toColumn: Dim_Product.ItemCode
+
+relationship 0193f678-06ec-43c0-a837-788b440cd8b7
+	fromColumn: Fact_PackOut.PackDate
+	toColumn: Dim_Date.Date
+
+relationship af387b53-3caa-4c32-ae77-60c6549388e9
+	fromColumn: Fact_PackOut.ItemCode
+	toColumn: Dim_Product.ItemCode
+

@@ -1,0 +1,270 @@
+/// Enter the File Path where you have saved the source CSV files
+expression FilePath = "C:\Users\LeeChannon\PyCharmProjects\DEMO\Warehouse Ready\02 The Build\data" meta [IsParameterQuery = true, IsParameterQueryRequired = true, Type = type text]
+	lineageTag: e35adaff-cf22-4da7-96d8-498be4b9f2af
+	queryGroup: Parameters
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Text
+
+expression Start_Year =
+		let
+		    Source = 2023 meta [IsParameterQuery = true, IsParameterQueryRequired = true, Type = type number]
+		in
+		    Source
+	lineageTag: f7ac59d3-7f4f-40ce-b722-92e454e1e058
+	queryGroup: Parameters
+
+	annotation PBI_ResultType = Number
+
+expression End_Year =
+		let
+		    Source = 2027 meta [IsParameterQuery = true, IsParameterQueryRequired = true, Type = type number]
+		in
+		    Source
+	lineageTag: 35deb838-83da-4ea5-b23f-07d3bb71ffab
+	queryGroup: Parameters
+
+	annotation PBI_ResultType = Number
+
+expression FinYearStart =
+		let
+		    Source = 4 meta [IsParameterQuery=true, Type="Number", IsParameterQueryRequired=true]
+		in
+		    Source
+	lineageTag: 7a648be8-469f-4baf-9a3b-4e941d4b1992
+	queryGroup: Parameters
+
+	annotation PBI_ResultType = Number
+
+/// ERP customers: trimmed, codes upper-cased, dates typed with the en-NZ locale
+expression stg_Customers =
+		let
+		    Source = Csv.Document(File.Contents(FilePath & "\ERP\Customers.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+		    PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+		    // ERP text has trailing spaces; codes upper-cased so they match across extracts
+		    Trimmed = Table.TransformColumns(PromotedHeaders, {}, Text.Trim),
+		    UpperCodes = Table.TransformColumns(Trimmed, {{"CustomerCode", Text.Upper, type text}}),
+		    // ERP dates are dd/mm/yyyy, so the type change uses the en-NZ locale
+		    Typed = Table.TransformColumnTypes(UpperCodes, {
+		        {"CustomerName", type text}, {"Channel", type text}, {"City", type text}, {"Region", type text},
+		        {"Country", type text}, {"PaymentTerms", type text}, {"CreatedDate", type date}, {"Active", type text}
+		    }, "en-NZ")
+		in
+		    Typed
+	lineageTag: 49ff33a8-5d2f-471f-80a3-b943ab4ee5da
+	queryGroup: 'Source Files'
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+/// ERP items: trimmed, codes and product group upper-cased, blank stem lengths set to null
+expression stg_Items =
+		let
+		    Source = Csv.Document(File.Contents(FilePath & "\ERP\Items.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+		    PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+		    Trimmed = Table.TransformColumns(PromotedHeaders, {}, Text.Trim),
+		    // ProductGroup arrives in mixed case (ROSES, Lilies); item codes upper-cased for matching
+		    UpperText = Table.TransformColumns(Trimmed, {{"ItemCode", Text.Upper, type text}, {"ProductGroup", Text.Upper, type text}}),
+		    // Gift and mixed items have no stem length
+		    BlankToNull = Table.ReplaceValue(UpperText, "", null, Replacer.ReplaceValue, {"StemLengthCm"}),
+		    Typed = Table.TransformColumnTypes(BlankToNull, {
+		        {"ItemDescription", type text}, {"StemLengthCm", Int64.Type}, {"StemsPerBunch", Int64.Type}, {"UOM", type text},
+		        {"ListPriceNZD", Currency.Type}, {"CreatedDate", type date}, {"Active", type text}
+		    }, "en-NZ")
+		in
+		    Typed
+	lineageTag: 4c952cd2-19e3-4da7-b2a2-8a1f9f8f6a21
+	queryGroup: 'Source Files'
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+/// ERP sales order headers
+expression stg_SalesOrderHeader =
+		let
+		    Source = Csv.Document(File.Contents(FilePath & "\ERP\SalesOrderHeader.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+		    PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+		    Trimmed = Table.TransformColumns(PromotedHeaders, {}, Text.Trim),
+		    UpperCodes = Table.TransformColumns(Trimmed, {{"OrderNumber", Text.Upper, type text}, {"CustomerCode", Text.Upper, type text}}),
+		    Typed = Table.TransformColumnTypes(UpperCodes, {
+		        {"OrderDate", type date}, {"DeliveryDate", type date}, {"OrderStatus", type text}, {"CustomerPO", type text}
+		    }, "en-NZ")
+		in
+		    Typed
+	lineageTag: b0fe343f-13d1-4962-8103-ab459739085e
+	queryGroup: 'Source Files'
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+/// ERP sales order lines
+expression stg_SalesOrderLines =
+		let
+		    Source = Csv.Document(File.Contents(FilePath & "\ERP\SalesOrderLines.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+		    PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+		    Trimmed = Table.TransformColumns(PromotedHeaders, {}, Text.Trim),
+		    UpperCodes = Table.TransformColumns(Trimmed, {{"OrderNumber", Text.Upper, type text}, {"ItemCode", Text.Upper, type text}}),
+		    Typed = Table.TransformColumnTypes(UpperCodes, {
+		        {"LineNumber", Int64.Type}, {"QuantityBunches", Int64.Type}, {"UnitPriceNZD", Currency.Type},
+		        {"DiscountPct", type number}, {"LineAmountNZD", Currency.Type}
+		    }, "en-NZ")
+		in
+		    Typed
+	lineageTag: 875a4d02-b9d2-4fca-9403-8580fc36647b
+	queryGroup: 'Source Files'
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+/// Packhouse varieties: trimmed, names and colours in proper case, ISO dates
+expression stg_Varieties =
+		let
+		    Source = Csv.Document(File.Contents(FilePath & "\Production\Varieties.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+		    PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+		    Trimmed = Table.TransformColumns(PromotedHeaders, {}, Text.Trim),
+		    // Names and colours arrive in mixed case (SNOWDRIFT, red); codes upper-cased for matching
+		    Cased = Table.TransformColumns(Trimmed, {
+		        {"VarietyCode", Text.Upper, type text}, {"VarietyName", Text.Proper, type text},
+		        {"Crop", Text.Proper, type text}, {"Colour", Text.Proper, type text}
+		    }),
+		    Typed = Table.TransformColumnTypes(Cased, {{"IntroducedDate", type date}, {"Active", type text}}, "en-NZ")
+		in
+		    Typed
+	lineageTag: 170e943e-02f0-449c-a49e-6b7f68eed544
+	queryGroup: 'Source Files'
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+/// Packhouse greenhouses
+expression stg_Greenhouses =
+		let
+		    Source = Csv.Document(File.Contents(FilePath & "\Production\Greenhouses.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+		    PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+		    Trimmed = Table.TransformColumns(PromotedHeaders, {}, Text.Trim),
+		    UpperCodes = Table.TransformColumns(Trimmed, {{"GreenhouseCode", Text.Upper, type text}}),
+		    Typed = Table.TransformColumnTypes(UpperCodes, {
+		        {"GreenhouseName", type text}, {"Site", type text}, {"AreaM2", Int64.Type},
+		        {"PrimaryCrop", type text}, {"CommissionedDate", type date}
+		    }, "en-NZ")
+		in
+		    Typed
+	lineageTag: 73d2962f-b6cb-4ed3-a546-10d946faf54f
+	queryGroup: 'Source Files'
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+/// Packhouse staff: blank end dates set to null for current staff
+expression stg_Staff =
+		let
+		    Source = Csv.Document(File.Contents(FilePath & "\Production\Staff.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+		    PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+		    Trimmed = Table.TransformColumns(PromotedHeaders, {}, Text.Trim),
+		    UpperCodes = Table.TransformColumns(Trimmed, {{"StaffID", Text.Upper, type text}}),
+		    BlankToNull = Table.ReplaceValue(UpperCodes, "", null, Replacer.ReplaceValue, {"EndDate"}),
+		    Typed = Table.TransformColumnTypes(BlankToNull, {
+		        {"FirstName", type text}, {"LastName", type text}, {"Role", type text}, {"EmploymentType", type text},
+		        {"StartDate", type date}, {"EndDate", type date}
+		    }, "en-NZ")
+		in
+		    Typed
+	lineageTag: c3d6c9d1-acbe-4385-8a1c-c741e30f5e92
+	queryGroup: 'Source Files'
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+/// Packhouse harvest: stems picked and harvest hours by picker, greenhouse, variety and day
+expression stg_Harvest =
+		let
+		    Source = Csv.Document(File.Contents(FilePath & "\Production\Harvest.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+		    PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+		    Trimmed = Table.TransformColumns(PromotedHeaders, {}, Text.Trim),
+		    UpperCodes = Table.TransformColumns(Trimmed, {
+		        {"StaffID", Text.Upper, type text}, {"GreenhouseCode", Text.Upper, type text}, {"VarietyCode", Text.Upper, type text}
+		    }),
+		    Typed = Table.TransformColumnTypes(UpperCodes, {
+		        {"HarvestDate", type date}, {"StemsPicked", Int64.Type}, {"HarvestHours", type number}
+		    }, "en-NZ")
+		in
+		    Typed
+	lineageTag: 86a81152-2764-4263-a6a8-98b29880157b
+	queryGroup: 'Source Files'
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+/// Packhouse pack-out: grade code G60 split out to a stem length so it can match the ERP item
+expression stg_PackOut =
+		let
+		    Source = Csv.Document(File.Contents(FilePath & "\Production\PackOut.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+		    PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+		    Trimmed = Table.TransformColumns(PromotedHeaders, {}, Text.Trim),
+		    UpperCodes = Table.TransformColumns(Trimmed, {
+		        {"PackLine", Text.Upper, type text}, {"VarietyCode", Text.Upper, type text}, {"GradeCode", Text.Upper, type text}
+		    }),
+		    // The packhouse codes grades as G40, G60...; the ERP holds the same thing as a number in StemLengthCm
+		    StemLength = Table.AddColumn(UpperCodes, "StemLengthCm", each Number.From(Text.Range([GradeCode], 1)), Int64.Type),
+		    Typed = Table.TransformColumnTypes(StemLength, {
+		        {"PackDate", type date}, {"BunchSize", Int64.Type}, {"BunchesPacked", Int64.Type}, {"StemsRejected", Int64.Type}
+		    }, "en-NZ")
+		in
+		    Typed
+	lineageTag: f5c17f85-f456-4698-acb7-28254ed3e719
+	queryGroup: 'Source Files'
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+/// Hand-kept product mapping: ERP item to variety, variety default item and range
+expression stg_ProductMapping =
+		let
+		    Source = Excel.Workbook(File.Contents(FilePath & "\Manual\ProductMapping.xlsx"), null, true){[Item = "Mapping", Kind = "Sheet"]}[Data],
+		    PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+		    // Typed in by hand: some variety codes are lower case or have trailing spaces
+		    Cleaned = Table.TransformColumns(PromotedHeaders, {
+		        {"ItemCode", each Text.Upper(Text.Trim(Text.From(_))), type text},
+		        {"ItemDescription", each Text.Trim(Text.From(_)), type text},
+		        {"VarietyCode", each if _ = null then null else Text.Upper(Text.Trim(Text.From(_))), type text},
+		        {"VarietyDefault", each _ = "Y", type logical},
+		        {"Range", each Text.Trim(Text.From(_)), type text},
+		        {"MappedBy", each Text.Trim(Text.From(_)), type text}
+		    }),
+		    Typed = Table.TransformColumnTypes(Cleaned, {{"MappedDate", type date}})
+		in
+		    Typed
+	lineageTag: 11edaf54-021a-4db0-a458-5e3d390afc1f
+	queryGroup: 'Source Files'
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+/// Hand-kept range list: sort order and description for each range
+expression stg_RangeList =
+		let
+		    Source = Excel.Workbook(File.Contents(FilePath & "\Manual\ProductMapping.xlsx"), null, true){[Item = "Range List", Kind = "Sheet"]}[Data],
+		    PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+		    Typed = Table.TransformColumnTypes(PromotedHeaders, {
+		        {"Range", type text}, {"SortOrder", Int64.Type}, {"Description", type text}
+		    })
+		in
+		    Typed
+	lineageTag: 98ff18f1-bd22-4b64-94ac-e55b25064252
+	queryGroup: 'Source Files'
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

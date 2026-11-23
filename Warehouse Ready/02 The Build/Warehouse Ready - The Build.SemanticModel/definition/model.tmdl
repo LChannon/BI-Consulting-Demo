@@ -1,0 +1,38 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-NZ
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+queryGroup Parameters
+
+	annotation PBI_QueryGroupOrder = 0
+
+queryGroup 'Source Files'
+
+	annotation PBI_QueryGroupOrder = 1
+
+queryGroup 'Report Tables'
+
+	annotation PBI_QueryGroupOrder = 2
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["Start_Year","End_Year","FinYearStart","FilePath","stg_Customers","stg_Items","stg_SalesOrderHeader","stg_SalesOrderLines","stg_Varieties","stg_Greenhouses","stg_Staff","stg_Harvest","stg_PackOut","stg_ProductMapping","stg_RangeList","Dim_Date","Dim_Customer","Dim_Product","Dim_Greenhouse","Dim_Staff","Fact_Sales","Fact_Harvest","Fact_PackOut","_Measures"]
+
+annotation PBI_ProTooling = ["DevMode","DaxQueryView_Desktop"]
+
+ref table Dim_Date
+ref table Dim_Customer
+ref table Dim_Product
+ref table Dim_Greenhouse
+ref table Dim_Staff
+ref table Fact_Sales
+ref table Fact_Harvest
+ref table Fact_PackOut
+ref table _Measures
+
+ref cultureInfo en-US
+

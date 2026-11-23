@@ -1,0 +1,124 @@
+/// Sales fact at ERP order line grain. Cancelled orders are kept and flagged in OrderStatus
+table Fact_Sales
+	lineageTag: ad1be07c-cd9a-4548-861b-96d7e3abb513
+
+	column OrderNumber
+		dataType: string
+		lineageTag: 469eb551-1752-485d-b9ae-5af1eb7a23d0
+		summarizeBy: none
+		sourceColumn: OrderNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	column LineNumber
+		dataType: int64
+		formatString: 0
+		lineageTag: 6892e24a-ae33-4cd5-a57a-f344d905e81c
+		summarizeBy: none
+		sourceColumn: LineNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	column OrderDate
+		dataType: dateTime
+		isHidden
+		formatString: Short Date
+		lineageTag: dacc27a6-a244-4533-b492-0fa0ca3fc993
+		summarizeBy: none
+		sourceColumn: OrderDate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column DeliveryDate
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 02f7ca66-1155-4c9f-a46a-ec643a3c2802
+		summarizeBy: none
+		sourceColumn: DeliveryDate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column CustomerCode
+		dataType: string
+		isHidden
+		lineageTag: 951cc1f8-af0d-4468-937c-c4f0616a228d
+		summarizeBy: none
+		sourceColumn: CustomerCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column ItemCode
+		dataType: string
+		isHidden
+		lineageTag: 631663a6-15fb-4df5-a3c5-867150eefcb5
+		summarizeBy: none
+		sourceColumn: ItemCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column OrderStatus
+		dataType: string
+		lineageTag: 6cbe5cb2-0159-47dd-96f2-f4657c639da1
+		summarizeBy: none
+		sourceColumn: OrderStatus
+
+		annotation SummarizationSetBy = Automatic
+
+	column QuantityBunches
+		dataType: int64
+		formatString: #,0
+		lineageTag: b2118695-f888-47d5-8301-4909a4f225b9
+		summarizeBy: sum
+		sourceColumn: QuantityBunches
+
+		annotation SummarizationSetBy = Automatic
+
+	column UnitPriceNZD
+		dataType: decimal
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: 7900b044-1d71-4854-a926-0ac9451e7595
+		summarizeBy: none
+		sourceColumn: UnitPriceNZD
+
+		annotation SummarizationSetBy = Automatic
+
+	column DiscountPct
+		dataType: double
+		formatString: 0
+		lineageTag: fb684ff5-40de-4317-97b0-891f0f51efcb
+		summarizeBy: none
+		sourceColumn: DiscountPct
+
+		annotation SummarizationSetBy = Automatic
+
+	column LineAmountNZD
+		dataType: decimal
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: 7a64bfa9-cda5-4021-afbd-f1b97d8c5562
+		summarizeBy: sum
+		sourceColumn: LineAmountNZD
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Fact_Sales = m
+		mode: import
+		queryGroup: 'Report Tables'
+		source =
+				let
+				    Lines = stg_SalesOrderLines,
+				    // The ERP splits each order into a header and lines; the fact is one row per order line
+				    WithHeader = Table.NestedJoin(Lines, {"OrderNumber"}, stg_SalesOrderHeader, {"OrderNumber"}, "Hdr", JoinKind.LeftOuter),
+				    HeaderCols = Table.ExpandTableColumn(WithHeader, "Hdr", {"OrderDate", "DeliveryDate", "CustomerCode", "OrderStatus"}),
+				    Selected = Table.SelectColumns(HeaderCols, {"OrderNumber", "LineNumber", "OrderDate", "DeliveryDate", "CustomerCode",
+				        "ItemCode", "OrderStatus", "QuantityBunches", "UnitPriceNZD", "DiscountPct", "LineAmountNZD"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"OrderDate", type date}, {"DeliveryDate", type date},
+				        {"CustomerCode", type text}, {"OrderStatus", type text}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table
+

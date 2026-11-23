@@ -1,0 +1,80 @@
+/// Pack-out fact at day, pack line and item grain, matched to the ERP item by variety, stem length and bunch size
+table Fact_PackOut
+	lineageTag: d866df0a-77d8-4b68-a52f-b6ee6abb51b9
+
+	column PackDate
+		dataType: dateTime
+		isHidden
+		formatString: Short Date
+		lineageTag: c5ea3305-aeee-41d3-b49c-3f65865769ae
+		summarizeBy: none
+		sourceColumn: PackDate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column PackLine
+		dataType: string
+		lineageTag: 1f4ab3cb-247e-4c32-8fc8-c217282c5ac3
+		summarizeBy: none
+		sourceColumn: PackLine
+
+		annotation SummarizationSetBy = Automatic
+
+	column ItemCode
+		dataType: string
+		isHidden
+		lineageTag: cb83daab-5afa-4afb-9520-8cadd7e522cd
+		summarizeBy: none
+		sourceColumn: ItemCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column BunchesPacked
+		dataType: int64
+		formatString: #,0
+		lineageTag: ac2cc1d6-ec6d-4339-9974-eb4d70a28a6e
+		summarizeBy: sum
+		sourceColumn: BunchesPacked
+
+		annotation SummarizationSetBy = Automatic
+
+	column StemsPacked
+		dataType: int64
+		formatString: #,0
+		lineageTag: 6bf9955d-6d7c-4ef5-9474-c6846d946b11
+		summarizeBy: sum
+		sourceColumn: StemsPacked
+
+		annotation SummarizationSetBy = Automatic
+
+	column StemsRejected
+		dataType: int64
+		formatString: #,0
+		lineageTag: f09bd2b5-7253-4d85-8e3d-f0c1da6a82d7
+		summarizeBy: sum
+		sourceColumn: StemsRejected
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Fact_PackOut = m
+		mode: import
+		queryGroup: 'Report Tables'
+		source =
+				let
+				    PackOut = stg_PackOut,
+				    // Each mapped ERP item is a variety, stem length and bunch size, which is the pack-out grain
+				    MappedItems = Table.SelectRows(stg_ProductMapping, each [VarietyCode] <> null),
+				    WithSize = Table.NestedJoin(MappedItems, {"ItemCode"}, stg_Items, {"ItemCode"}, "It", JoinKind.Inner),
+				    ItemKey = Table.ExpandTableColumn(Table.SelectColumns(WithSize, {"ItemCode", "VarietyCode", "It"}), "It", {"StemLengthCm", "StemsPerBunch"}),
+				    WithItem = Table.NestedJoin(PackOut, {"VarietyCode", "StemLengthCm", "BunchSize"}, ItemKey, {"VarietyCode", "StemLengthCm", "StemsPerBunch"}, "Itm", JoinKind.LeftOuter),
+				    ItemCol = Table.ExpandTableColumn(WithItem, "Itm", {"ItemCode"}),
+				    StemsPacked = Table.AddColumn(ItemCol, "StemsPacked", each [BunchesPacked] * [BunchSize], Int64.Type),
+				    Selected = Table.SelectColumns(StemsPacked, {"PackDate", "PackLine", "ItemCode", "BunchesPacked", "StemsPacked", "StemsRejected"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"ItemCode", type text}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table
+
