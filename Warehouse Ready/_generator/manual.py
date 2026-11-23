@@ -1,6 +1,6 @@
 """Warehouse Ready demo data: user-maintained Excel tables (data/Manual).
-ItemVarietyMap.xlsx  ERP item -> packhouse variety. Gift/mixed items unmapped; one Coral Dawn item forgotten.
-ProductRange.xlsx    user-defined Range per ERP item, held in neither system.
+ProductMapping.xlsx  ERP item -> packhouse variety, VarietyDefault flag (one item per variety), Range.
+                     Gift/mixed items have a Range but no variety; one Coral Dawn item is missing entirely.
 Budget.xlsx          one sheet per FY, Range x Channel x Measure rows, months across (needs unpivoting).
 Usage: python manual.py [data folder]   (run after dims.py and sales.py)
 """
@@ -37,18 +37,33 @@ def sheet(ws, header, rows, widths):
         ws.column_dimensions[col].width = wd
     ws.freeze_panes = "A2"
 
-# ---------------- ItemVarietyMap ----------------
+# ---------------- ProductMapping ----------------
+# One hand-kept workbook: ERP item -> packhouse variety, a default item per variety (so variety-level
+# facts such as Harvest can join the item-level product dimension), and the user-defined Range.
+PREMIUM_MIN = {"rose": 60, "lily": 80, "chrys": 80, "gerbera": 55, "lisianthus": 70}
+range_of = {}
+for it in items:
+    d = it["ItemDescription"].strip().lower()
+    if it["ProductGroup"] in ("GIFT", "MIXED"):
+        range_of[it["ItemCode"]] = "Seasonal"
+    else:
+        range_of[it["ItemCode"]] = "Premium" if int(it["StemLengthCm"]) >= PREMIUM_MIN[d.split()[0]] else "Everyday"
+
+sold = defaultdict(int)  # bunches sold per item, to pick each variety's default (popular, long-running) item
+for l in lines:
+    sold[l["ItemCode"]] += int(l["QuantityBunches"])
+
 vname = {v["VarietyCode"]: v["VarietyName"].strip().lower() for v in varieties}
 users = ["j.morgan", "k.reid", "a.harris"]
-map_rows, forgot = [], None
+map_rows, forgot, item_var = [], None, {}
 for it in items:
     d = it["ItemDescription"].strip().lower()
     vc = next((c for c, n in vname.items() if n in d), None)
     if vc is None:
-        continue  # gift and mixed items: no single variety
+        continue  # gift and mixed items added below, with no variety
     created = datetime.strptime(it["CreatedDate"], "%d/%m/%Y").date()
     if "coral dawn" in d and forgot is None and "60cm" in d:
-        forgot = it["ItemCode"]  # added to the ERP but never added to the map
+        forgot = it["ItemCode"]  # added to the ERP but never added to the mapping
         continue
     code = vc
     if random.random() < 0.06:
@@ -56,38 +71,33 @@ for it in items:
     elif random.random() < 0.05:
         code = vc + " "
     mapped = created if created > date(2020, 1, 1) else date(2021, 2, 15)
-    map_rows.append([it["ItemCode"], it["ItemDescription"].strip(), code, random.choice(users), mapped])
+    item_var[it["ItemCode"]] = vc
+    map_rows.append([it["ItemCode"], it["ItemDescription"].strip(), code, "", range_of[it["ItemCode"]],
+                     random.choice(users), mapped])
+default = {}
+for ic, vc in item_var.items():
+    if vc not in default or sold[ic] > sold[default[vc]]:
+        default[vc] = ic
+for r in map_rows:
+    if default[item_var[r[0]]] == r[0]:
+        r[3] = "Y"
+for i, it in enumerate(i for i in items if i["ProductGroup"] in ("GIFT", "MIXED")):
+    map_rows.append([it["ItemCode"], it["ItemDescription"].strip(), "", "", "Seasonal", users[i % 3],
+                     date(2021, 2, 15)])
 wb = Workbook()
 ws = wb.active
-ws.title = "Map"
-sheet(ws, ["ItemCode", "ItemDescription", "VarietyCode", "MappedBy", "MappedDate"], map_rows, [12, 36, 12, 12, 12])
-for r in ws.iter_rows(min_row=2, min_col=5, max_col=5):
+ws.title = "Mapping"
+sheet(ws, ["ItemCode", "ItemDescription", "VarietyCode", "VarietyDefault", "Range", "MappedBy", "MappedDate"],
+      map_rows, [12, 36, 12, 14, 12, 12, 12])
+for r in ws.iter_rows(min_row=2, min_col=7, max_col=7):
     r[0].number_format = "dd/mm/yyyy"
-wb.save(os.path.join(OUT, "Manual/ItemVarietyMap.xlsx"))
-
-# ---------------- ProductRange ----------------
-PREMIUM_MIN = {"rose": 60, "lily": 80, "chrys": 80, "gerbera": 55, "lisianthus": 70}
-range_of = {}
-pr_rows = []
-for it in items:
-    d = it["ItemDescription"].strip().lower()
-    if it["ProductGroup"] in ("GIFT", "MIXED"):
-        rng = "Seasonal"
-    else:
-        crop = d.split()[0]
-        rng = "Premium" if int(it["StemLengthCm"]) >= PREMIUM_MIN[crop] else "Everyday"
-    range_of[it["ItemCode"]] = rng
-    pr_rows.append([it["ItemCode"], it["ItemDescription"].strip(), rng])
-wb = Workbook()
-ws = wb.active
-ws.title = "Ranges"
-sheet(ws, ["ItemCode", "ItemDescription", "Range"], pr_rows, [12, 36, 12])
 ws2 = wb.create_sheet("Range List")
 sheet(ws2, ["Range", "SortOrder", "Description"],
       [["Premium", 1, "Long stem grades for florists and export"],
        ["Everyday", 2, "Shorter grades for supermarkets and volume buyers"],
        ["Seasonal", 3, "Gift and mixed items for peak occasions"]], [12, 10, 50])
-wb.save(os.path.join(OUT, "Manual/ProductRange.xlsx"))
+wb.save(os.path.join(OUT, "Manual/ProductMapping.xlsx"))
+pr_rows = map_rows
 
 # ---------------- Budget ----------------
 # Built from actuals with noise, as if set before each year: bunches and revenue by Range x Channel x month.

@@ -18,7 +18,7 @@ Each script reads the output of the ones before it, so run them in this order fr
 | 1 | `dims.py` | `ERP/Customers.csv`, `ERP/Items.csv`, `Production/Varieties.csv`, `Production/Greenhouses.csv`, `Production/Staff.csv` | nothing |
 | 2 | `sales.py` | `ERP/SalesOrderHeader.csv`, `ERP/SalesOrderLines.csv` | customers, items |
 | 3 | `production.py` | `Production/Harvest.csv`, `Production/PackOut.csv` | dimensions, sales |
-| 4 | `manual.py` | `Manual/ItemVarietyMap.xlsx`, `Manual/ProductRange.xlsx`, `Manual/Budget.xlsx` | items, varieties, sales |
+| 4 | `manual.py` | `Manual/ProductMapping.xlsx`, `Manual/Budget.xlsx` | items, varieties, sales |
 | 5 | `report.py` | `01 The Decision/NVX Weekly Report w-e 16-02-2025.xlsx` | all of the above |
 
 ```
@@ -36,9 +36,9 @@ By default the scripts write to `../01 The Decision/data`. To write somewhere el
 - **Seasonality:** Valentine's Day, Mother's Day and December peaks, a winter dip and growth of about 5% a year
 - **Events:** the Coral Dawn rose from 2 September 2024, greenhouse GH06 from 14 July 2025, staff leaving and being replaced
 - **Reconciliation:** bunches packed run 3 to 8% above bunches sold each week, and stems picked equal stems packed plus rejects
-- **Mess:** inconsistent case, trailing spaces, `dd/mm/yyyy` dates in the ERP and ISO dates in the packhouse system, gift items with no variety, and one Coral Dawn item missing from the mapping
+- **Mess:** inconsistent case, trailing spaces, `dd/mm/yyyy` dates in the ERP and ISO dates in the packhouse system, gift items with a range but no variety, and one Coral Dawn item missing from the mapping
 - **Budget:** set from actuals with noise, 3% over in FY24, 6% over in FY25 and 2% under in FY26
 
 ## Changing the Data
 
-Edit the constants near the top of each script (date range, volumes, crops, channels) and re-run from that script onwards. Changing an earlier script changes everything after it, so re-run the full sequence and re-copy the data into the later parts.
+Edit the settings in a script (date range, volumes, crops, channels) and re-run from that script onwards. Changing an earlier script changes everything after it, so re-run the full sequence and re-copy the data into the later parts.

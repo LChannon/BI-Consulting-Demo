@@ -12,7 +12,7 @@ NVX Flowers is a fictional greenhouse grower of cut flowers (roses, lilies, chry
 
 - An **ERP** holding customers, items and sales orders, using its own item codes
 - A **packhouse system** holding varieties, greenhouses, staff, harvest and pack-out records, using different codes for the same flowers
-- **Spreadsheets** kept by hand: a mapping from ERP items to packhouse varieties, a product range grouping that exists in neither system, and the sales budget
+- **Spreadsheets** kept by hand: a product mapping from ERP items to packhouse varieties, which also holds a range grouping that exists in neither system, and the sales budget
 
 Each week someone exported from both systems, pasted the extracts into a workbook, filled the formulas down, typed in the budget and sent the report out. The sample data covers April 2023 to March 2026 (three financial years) and includes the kind of mess real extracts carry: inconsistent case, trailing spaces, two date formats and codes that don't line up between systems.
 
@@ -40,8 +40,7 @@ Grey cells are typed in each week: the week ending date, who prepared the report
 - `data/Production/Staff.csv` - pickers, packers and supervisors, including leavers and their replacements
 - `data/Production/Harvest.csv` - stems picked and harvest hours by picker, greenhouse, variety and day
 - `data/Production/PackOut.csv` - bunches packed and stems rejected by variety, grade and bunch size per day
-- `data/Manual/ItemVarietyMap.xlsx` - ERP item to packhouse variety mapping, maintained by hand
-- `data/Manual/ProductRange.xlsx` - the Premium, Everyday and Seasonal grouping for each ERP item
+- `data/Manual/ProductMapping.xlsx` - maintained by hand: each ERP item's packhouse variety, a default item for each variety, and its range (Premium, Everyday or Seasonal)
 - `data/Manual/Budget.xlsx` - monthly sales budget, one sheet per financial year, with months across the columns
 
 ERP files use `dd/mm/yyyy` dates and packhouse files use `yyyy-mm-dd`, as the two systems exported them.

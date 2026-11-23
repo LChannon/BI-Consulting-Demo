@@ -1,0 +1,61 @@
+CustomerCode,CustomerName,Channel,City,Region,Country,PaymentTerms,CreatedDate,Active
+C10003,Kowhai Botanics,Florist,Palmerston North,Manawatu-Whanganui,New Zealand,20M,06/03/2020,Y
+C10006,IVY BOTANICS,Florist,Nelson,Nelson,New Zealand,20M,26/02/2018,Y
+C10009,Willow Flowers,Florist,Dunedin,Otago,New Zealand,20M,09/06/2020,Y
+C10012,Meadowlark Botanics,Florist,Christchurch,Canterbury,New Zealand,20M,21/07/2019,Y
+C10015,Petal Botanics,Florist,New Plymouth,Taranaki,New Zealand,20M,06/12/2023,Y
+C10018,Clover Floral Studio,Florist,Whangarei,Northland,New Zealand,20M,28/04/2021,Y
+C10021,Dahlia Flowers,Florist,Hamilton,Waikato,New Zealand,20M,12/04/2022,Y
+C10024,Bluebell Botanics,Florist,Whangarei,Northland,New Zealand,20M,13/05/2025,Y
+C10027,Little Flower Co,Florist,Wellington,Wellington,New Zealand,20M,08/10/2017,Y
+C10030,Lantern Florist,Florist,Whangarei,Northland,New Zealand,20M,02/08/2018,Y
+C10033,Hill Street Flower Co,Florist,Whangarei,Northland,New Zealand,20M,09/07/2020,Y
+C10036,Magnolia Floral Studio,Florist,Christchurch,Canterbury,New Zealand,20M,29/03/2018,Y
+C10039,GARDEN GATE FLOWER CO,Florist,Queenstown,Otago,New Zealand,20M,11/04/2023,Y
+C10042,Hazel Florist,Florist,Christchurch,Canterbury,New Zealand,20M,28/04/2018,Y
+C10045,Blossom Flower Co,Florist,Napier,Hawke's Bay,New Zealand,20M,20/07/2025,Y
+C10048,Bloom Botanics,Florist,New Plymouth,Taranaki,New Zealand,20M,11/06/2022,Y
+C10051,Fern Florist,Florist,Queenstown,Otago,New Zealand,20M,02/12/2022,Y
+C10054,WILD FLOWER CO,Florist,Napier,Hawke's Bay,New Zealand,20M,01/11/2023,Y
+C10057,Juniper Florist,Florist,Napier,Hawke's Bay,New Zealand,20M,16/03/2021,Y
+C10060,Primrose Floral Studio,Florist,Wellington,Wellington,New Zealand,20M,24/10/2023,Y
+C10063,Stem Flowers,Florist,Queenstown,Otago,New Zealand,20M,16/10/2018,Y
+C10066,Rata Flowers,Florist,Wellington,Wellington,New Zealand,20M,24/09/2016,Y
+C10069,Thistle Flower Co,Florist,Whangarei,Northland,New Zealand,20M,03/10/2022,Y
+C10072,Sage Botanics,Florist,Hamilton,Waikato,New Zealand,20M,09/01/2020,Y
+C10075,Kauri Florist,Florist,Whangarei,Northland,New Zealand,20M,16/08/2018,Y
+C10078,Harbour Floral Studio,Florist,Auckland,Auckland,New Zealand,20M,10/01/2022,Y
+C10081,Orchard Lane Flower Co,Florist,New Plymouth,Taranaki,New Zealand,20M,26/11/2019,Y
+C10084,Posy Floral Studio,Florist,Auckland,Auckland,New Zealand,20M,22/01/2022,Y
+C10087,Poppy Flower Co,Florist,Nelson,Nelson,New Zealand,20M,23/03/2020,Y
+C10090,Tui Florist,Florist,Dunedin,Otago,New Zealand,20M,10/03/2023,Y
+C10093,Central Flower Markets,Wholesaler,Hamilton,Waikato,New Zealand,20M,03/10/2020,Y
+C10096,Southern Floral Wholesale,Wholesaler,New Plymouth,Taranaki,New Zealand,20M,26/12/2019,Y
+C10099,Island Bloom Distributors,Wholesaler,Whangarei,Northland,New Zealand,20M,22/07/2019,Y
+C10102,Metro Stems Ltd,Wholesaler,Dunedin,Otago,New Zealand,20M,04/03/2020,Y
+C10105,Coastline Flower Supply,Wholesaler,Wellington,Wellington,New Zealand,20M,13/04/2017,Y
+C10108,PACIFIC PETAL TRADERS,Wholesaler,Hamilton,Waikato,New Zealand,20M,21/09/2020,Y
+C10111,Northern Flower Exchange,Wholesaler,Auckland,Auckland,New Zealand,20M,11/08/2025,Y
+C10114,Capital Wholesale Flowers,Wholesaler,Hamilton,Waikato,New Zealand,20M,10/07/2021,N
+C10117,Plains Floral Supply ,Wholesaler,Wellington,Wellington,New Zealand,20M,15/02/2018,Y
+C10120,Bay Flower Hub,Wholesaler,Queenstown,Otago,New Zealand,20M,18/08/2017,Y
+C10123,Lakes Wholesale Blooms,Wholesaler,Tauranga,Bay of Plenty,New Zealand,20M,27/02/2017,Y
+C10126,Mainland Stems,Wholesaler,Christchurch,Canterbury,New Zealand,20M,16/01/2025,Y
+C10129,FreshMart Supermarkets,Supermarket,Dunedin,Otago,New Zealand,30D,07/10/2023,Y
+C10132,ValuePlus Foods,Supermarket,Napier,Hawke's Bay,New Zealand,30D,10/11/2019,Y
+C10135,Corner Grocer Group,Supermarket,Napier,Hawke's Bay,New Zealand,30D,03/04/2021,Y
+C10138,UrbanFresh Markets,Supermarket,Christchurch,Canterbury,New Zealand,30D,28/12/2023,Y
+C10141,HomeBasket Stores ,Supermarket,Wellington,Wellington,New Zealand,30D,26/03/2020,Y
+C10144,GreenLeaf Grocers,Supermarket,Christchurch,Canterbury,New Zealand,30D,22/08/2022,Y
+C10147,Harbour Bloom Imports Pty,Export,Sydney,NSW,Australia,CIA,17/09/2019,Y
+C10150,Southern Cross Flowers Pty,Export,Melbourne,VIC,Australia,CIA,30/06/2023,Y
+C10153,Sakura Flower Trading KK,Export,Tokyo,Tokyo,Japan,CIA,23/11/2018,Y
+C10156,Kansai Hana Imports,Export,Osaka,Osaka,Japan,CIA,05/11/2020,Y
+C10159,Lion City Florals Pte,Export,Singapore,Singapore,Singapore,CIA,19/01/2025,Y
+C10162,PACIFIC COAST BLOOMS INC,Export,Los Angeles,CA,United States,CIA,15/09/2023,Y
+C10165,Victoria Petal Imports,Export,Hong Kong,Hong Kong,Hong Kong,CIA,29/05/2017,N
+C10168,Sunshine Coast Stems Pty,Export,Brisbane,QLD,Australia,CIA,11/03/2025,Y
+C10171,FlowersToday Online,Online,Hamilton,Waikato,New Zealand,7D,09/06/2023,Y
+C10174,BloomBox NZ,Online,Napier,Hawke's Bay,New Zealand,7D,12/02/2022,Y
+C10177,SAME DAY STEMS,Online,Whangarei,Northland,New Zealand,7D,22/03/2025,Y
+C10180,PostAPosy,Online,Queenstown,Otago,New Zealand,7D,22/05/2023,Y

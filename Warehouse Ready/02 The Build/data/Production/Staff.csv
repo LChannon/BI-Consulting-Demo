@@ -1,0 +1,35 @@
+StaffID,FirstName,LastName,Role,EmploymentType,StartDate,EndDate
+S0001,Ana,Tupou,Supervisor,Permanent,2019-02-08,
+S0002,Mei,Smith,Supervisor,Permanent,2021-09-15,
+S0003,Losa,Walker,Picker,Seasonal,2021-12-26,
+S0004,James,Te Rangi,Picker,Seasonal,2020-02-26,
+S0005,Sione,Taufa,Picker,Seasonal,2021-05-01,
+S0006,Emma,Nguyen,Picker,Permanent,2018-09-13,
+S0007,Aroha,Walker,Picker,Permanent,2020-11-21,2024-05-13
+S0008,Mateo,Singh,Picker,Seasonal,2019-03-14,
+S0009,Priya,Tupou,Picker,Seasonal,2023-01-20,
+S0010,Hana,Patel,Picker,Permanent,2022-10-15,2024-03-14
+S0011,Jun,Campbell,Picker,Permanent,2021-05-02,2025-04-06
+S0012,Mere,Fraser,Picker,Seasonal,2019-10-13,
+S0013,Daniel,Patel,Picker,Permanent,2019-07-21,
+S0014,Arjun,Smith,Picker,Permanent,2019-03-11,2024-09-07
+S0015,Grace,Chen,Picker,Permanent,2022-11-01,2024-12-01
+S0016,Olivia,Nguyen,Picker,Permanent,2019-11-02,
+S0017,Ben,Walker,Picker,Permanent,2021-06-27,2023-11-27
+S0018,Ruby,Campbell,Packer,Permanent,2020-02-27,2024-11-01
+S0019,Ravi,Walker,Packer,Seasonal,2022-12-06,2024-11-08
+S0020,Sarah,Reid,Packer,Permanent,2018-03-03,
+S0021,Chloe,Brown,Packer,Permanent,2018-05-04,
+S0022,Tama,Harris,Packer,Permanent,2021-04-02,
+S0023,Sam,Chen,Packer,Seasonal,2018-10-29,2024-06-12
+S0024,Leon,Wilson,Packer,Permanent,2022-04-22,
+S0025,Noah,Kaur,Packer,Permanent,2021-09-20,
+S0026,Tane,Harris,Picker,Permanent,2024-06-10,
+S0027,Lucy,Patel,Picker,Permanent,2024-04-02,
+S0028,Hemi,Harris,Picker,Permanent,2025-05-21,
+S0029,Zara,Tupou,Picker,Permanent,2024-10-06,
+S0030,Kai,Campbell,Picker,Permanent,2024-12-22,
+S0031,Maya,Smith,Picker,Permanent,2023-12-29,
+S0032,Finn,Te Rangi,Packer,Permanent,2024-11-24,
+S0033,Leilani,Nguyen,Packer,Seasonal,2024-11-28,
+S0034,Oscar,Fraser,Packer,Seasonal,2024-07-20,
