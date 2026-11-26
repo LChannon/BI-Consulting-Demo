@@ -1,0 +1,253 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "fc35299931eae713dcd2",
+  "position": {
+    "x": 1010,
+    "y": 670,
+    "z": 5000,
+    "height": 500,
+    "width": 970,
+    "tabOrder": 5000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim_Greenhouse"
+                    }
+                  },
+                  "Property": "GreenhouseCode"
+                }
+              },
+              "queryRef": "Dim_Greenhouse.GreenhouseCode",
+              "nativeQueryRef": "GreenhouseCode"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim_Greenhouse"
+                    }
+                  },
+                  "Property": "GreenhouseName"
+                }
+              },
+              "queryRef": "Dim_Greenhouse.GreenhouseName",
+              "nativeQueryRef": "GreenhouseName"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Gas GJ"
+                }
+              },
+              "queryRef": "_Measures.Gas GJ",
+              "nativeQueryRef": "Gas GJ"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Electricity kWh"
+                }
+              },
+              "queryRef": "_Measures.Electricity kWh",
+              "nativeQueryRef": "Electricity kWh"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Energy Cost $"
+                }
+              },
+              "queryRef": "_Measures.Energy Cost $",
+              "nativeQueryRef": "Energy Cost $"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Stems Picked"
+                }
+              },
+              "queryRef": "_Measures.Stems Picked",
+              "nativeQueryRef": "Stems Picked"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Energy Cost per Stem"
+                }
+              },
+              "queryRef": "_Measures.Energy Cost per Stem",
+              "nativeQueryRef": "Energy Cost per Stem"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Energy by Greenhouse'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            },
+            "fontFamily": {
+              "expr": {
+                "Literal": {
+                  "Value": "''Segoe UI', wf_segoe-ui_normal, helvetica, arial, sans-serif'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "b848b1411474386a7228",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Dim_Greenhouse"
+              }
+            },
+            "Property": "GreenhouseCode"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "f26fcacb22cd3f3631b2",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Dim_Greenhouse"
+              }
+            },
+            "Property": "GreenhouseName"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "e2b876f3c12f9e72f243",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Measures"
+              }
+            },
+            "Property": "Gas GJ"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "d4f260784e21ba07bca4",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Measures"
+              }
+            },
+            "Property": "Electricity kWh"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "0d3553cd2d73ff2c036c",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Measures"
+              }
+            },
+            "Property": "Energy Cost $"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "35ae0d6b7e57d8771bf4",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Measures"
+              }
+            },
+            "Property": "Stems Picked"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "4b74026d0325b2ad0eb0",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Measures"
+              }
+            },
+            "Property": "Energy Cost per Stem"
+          }
+        },
+        "type": "Categorical"
+      }
+    ]
+  }
+}

@@ -1,0 +1,78 @@
+/// Harvest fact at picker, greenhouse, variety and day grain. Joined to Dim_Product through the variety default item, so only report it at variety level and above
+table Fact_Harvest
+	lineageTag: 96ad8003-fd10-4325-8c35-0ea54af88bcf
+
+	column HarvestDate
+		dataType: dateTime
+		isHidden
+		formatString: Short Date
+		lineageTag: 11493b06-31d1-4741-af0a-472d7b5a5bf0
+		summarizeBy: none
+		sourceColumn: HarvestDate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column StaffID
+		dataType: string
+		isHidden
+		lineageTag: 8aa8d1ba-00aa-420c-9018-5b9824c3fcad
+		summarizeBy: none
+		sourceColumn: StaffID
+
+		annotation SummarizationSetBy = Automatic
+
+	column GreenhouseCode
+		dataType: string
+		isHidden
+		lineageTag: 372121f7-d977-42f3-bc8c-c157a4ee756a
+		summarizeBy: none
+		sourceColumn: GreenhouseCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column ItemCode
+		dataType: string
+		isHidden
+		lineageTag: 14974b1e-bbf3-4c6c-b1e5-eb7c84b17b9c
+		summarizeBy: none
+		sourceColumn: ItemCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column StemsPicked
+		dataType: int64
+		formatString: #,0
+		lineageTag: bf06a709-2db3-421d-8239-80a2222c068e
+		summarizeBy: sum
+		sourceColumn: StemsPicked
+
+		annotation SummarizationSetBy = Automatic
+
+	column HarvestHours
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 43c8500b-8078-4a58-94ff-69c5d93c9dc3
+		summarizeBy: sum
+		sourceColumn: HarvestHours
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Fact_Harvest = m
+		mode: import
+		queryGroup: 'Report Tables'
+		source =
+				let
+				    Harvest = stg_Harvest,
+				    // Harvest is recorded by variety only, so it joins the product dimension through each variety's default item
+				    Defaults = Table.SelectColumns(Table.SelectRows(stg_ProductMapping, each [VarietyDefault] = true), {"VarietyCode", "ItemCode"}),
+				    WithItem = Table.NestedJoin(Harvest, {"VarietyCode"}, Defaults, {"VarietyCode"}, "Def", JoinKind.LeftOuter),
+				    ItemCol = Table.ExpandTableColumn(WithItem, "Def", {"ItemCode"}),
+				    Selected = Table.SelectColumns(ItemCol, {"HarvestDate", "StaffID", "GreenhouseCode", "ItemCode", "StemsPicked", "HarvestHours"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"ItemCode", type text}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table
+

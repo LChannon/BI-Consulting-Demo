@@ -1,0 +1,178 @@
+/// Product dimension at ERP item grain, conformed with the packhouse through the product mapping. Key: ItemCode
+table Dim_Product
+	lineageTag: f00ce0d4-2691-4130-9e15-d4057727322e
+
+	column ItemCode
+		dataType: string
+		isKey
+		lineageTag: a3ef4bd4-3d17-41b2-ad95-c5a873907dd0
+		summarizeBy: none
+		sourceColumn: ItemCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column ItemDescription
+		dataType: string
+		lineageTag: 585b47ad-6927-46e0-9f6b-5f3ce1b5fdf4
+		summarizeBy: none
+		sourceColumn: ItemDescription
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductGroup
+		dataType: string
+		lineageTag: bf281c1b-9ead-4c48-90d8-09c2f4561693
+		summarizeBy: none
+		sourceColumn: ProductGroup
+
+		annotation SummarizationSetBy = Automatic
+
+	column StemLengthCm
+		dataType: int64
+		formatString: 0
+		lineageTag: f07f1deb-5c99-4da6-a4be-525441b7deec
+		summarizeBy: none
+		sourceColumn: StemLengthCm
+
+		annotation SummarizationSetBy = Automatic
+
+	column StemsPerBunch
+		dataType: int64
+		formatString: 0
+		lineageTag: 2a97502f-05ad-45ac-b559-0f8db6c80787
+		summarizeBy: none
+		sourceColumn: StemsPerBunch
+
+		annotation SummarizationSetBy = Automatic
+
+	column UOM
+		dataType: string
+		lineageTag: 1bcc7720-f616-4f4a-a4f9-e89abc2663f0
+		summarizeBy: none
+		sourceColumn: UOM
+
+		annotation SummarizationSetBy = Automatic
+
+	column ListPriceNZD
+		dataType: decimal
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: 2d7987f2-6586-4cc2-928d-603f74f54595
+		summarizeBy: sum
+		sourceColumn: ListPriceNZD
+
+		annotation SummarizationSetBy = Automatic
+
+	column VarietyCode
+		dataType: string
+		lineageTag: 5f8f8b03-0d80-4476-b8e1-befe2eb82740
+		summarizeBy: none
+		sourceColumn: VarietyCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column VarietyName
+		dataType: string
+		lineageTag: 298741f4-c496-4636-b85c-9b24b297f590
+		summarizeBy: none
+		sourceColumn: VarietyName
+
+		annotation SummarizationSetBy = Automatic
+
+	column Crop
+		dataType: string
+		lineageTag: 24f93b08-4135-4268-8c7f-ff4d4c22a6ba
+		summarizeBy: none
+		sourceColumn: Crop
+
+		annotation SummarizationSetBy = Automatic
+
+	column Colour
+		dataType: string
+		lineageTag: a394d663-ffcb-48e7-a655-2ab55624c50f
+		summarizeBy: none
+		sourceColumn: Colour
+
+		annotation SummarizationSetBy = Automatic
+
+	column VarietyDefault
+		dataType: boolean
+		lineageTag: 10802f09-bf2b-49ac-b9be-e32c688799cc
+		summarizeBy: none
+		sourceColumn: VarietyDefault
+
+		annotation SummarizationSetBy = Automatic
+
+	column Range
+		dataType: string
+		lineageTag: c3d1f793-bbaa-4625-b904-9a9262fa1182
+		summarizeBy: none
+		sourceColumn: Range
+		sortByColumn: RangeSortOrder
+
+		annotation SummarizationSetBy = Automatic
+
+	column RangeSortOrder
+		dataType: int64
+		formatString: 0
+		lineageTag: 33001b32-5acf-4238-b595-bd740f0a5b90
+		summarizeBy: none
+		sourceColumn: RangeSortOrder
+
+		annotation SummarizationSetBy = Automatic
+
+	column CreatedDate
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: f7e96fb7-910e-4a3c-bff6-2423c1d60e22
+		summarizeBy: none
+		sourceColumn: CreatedDate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Active
+		dataType: string
+		lineageTag: 6febd9cf-b51b-4af1-95c3-3d68727d38ef
+		summarizeBy: none
+		sourceColumn: Active
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Product = m
+		mode: import
+		queryGroup: 'Report Tables'
+		source =
+				let
+				    Items = stg_Items,
+				    // The hand-kept mapping links each ERP item to a packhouse variety and a range
+				    WithMapping = Table.NestedJoin(Items, {"ItemCode"}, stg_ProductMapping, {"ItemCode"}, "Map", JoinKind.LeftOuter),
+				    MappingCols = Table.ExpandTableColumn(WithMapping, "Map", {"VarietyCode", "VarietyDefault", "Range"}),
+				    WithVariety = Table.NestedJoin(MappingCols, {"VarietyCode"}, stg_Varieties, {"VarietyCode"}, "Var", JoinKind.LeftOuter),
+				    VarietyCols = Table.ExpandTableColumn(WithVariety, "Var", {"VarietyName", "Crop", "Colour"}),
+				    // Gift and mixed items have no single variety; anything else missing from the mapping shows as Unmapped
+				    IsMixed = each List.Contains({"GIFT", "MIXED"}, [ProductGroup]),
+				    Filled = Table.TransformRows(VarietyCols, (r) => r & [
+				        VarietyName = r[VarietyName] ?? (if IsMixed(r) then "Mixed" else "Unmapped"),
+				        Crop = r[Crop] ?? (if IsMixed(r) then "Mixed" else "Unmapped"),
+				        Colour = r[Colour] ?? (if IsMixed(r) then "Mixed" else "Unmapped"),
+				        Range = r[Range] ?? "Unmapped",
+				        VarietyDefault = r[VarietyDefault] ?? false
+				    ]),
+				    AsTable = Table.FromRecords(Filled),
+				    WithSort = Table.NestedJoin(AsTable, {"Range"}, stg_RangeList, {"Range"}, "RL", JoinKind.LeftOuter),
+				    SortCol = Table.ExpandTableColumn(WithSort, "RL", {"SortOrder"}, {"RangeSortOrder"}),
+				    UnmappedLast = Table.ReplaceValue(SortCol, null, 99, Replacer.ReplaceValue, {"RangeSortOrder"}),
+				    Selected = Table.SelectColumns(UnmappedLast, {"ItemCode", "ItemDescription", "ProductGroup", "StemLengthCm",
+				        "StemsPerBunch", "UOM", "ListPriceNZD", "VarietyCode", "VarietyName", "Crop", "Colour", "VarietyDefault",
+				        "Range", "RangeSortOrder", "CreatedDate", "Active"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"ItemCode", type text}, {"ItemDescription", type text},
+				        {"ProductGroup", type text}, {"StemLengthCm", Int64.Type}, {"StemsPerBunch", Int64.Type}, {"UOM", type text},
+				        {"ListPriceNZD", Currency.Type}, {"VarietyCode", type text}, {"VarietyName", type text}, {"Crop", type text},
+				        {"Colour", type text}, {"VarietyDefault", type logical}, {"Range", type text}, {"RangeSortOrder", Int64.Type},
+				        {"CreatedDate", type date}, {"Active", type text}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table
+

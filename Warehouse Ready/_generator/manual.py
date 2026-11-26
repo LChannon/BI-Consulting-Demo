@@ -1,7 +1,8 @@
 """Warehouse Ready demo data: user-maintained Excel tables (data/Manual).
 ProductMapping.xlsx  ERP item -> packhouse variety, VarietyDefault flag (one item per variety), Range.
                      Gift/mixed items have a Range but no variety; one Coral Dawn item is missing entirely.
-Budget.xlsx          one sheet per FY, Range x Channel x Measure rows, months across (needs unpivoting).
+Budget.xlsx          one sheet per FY, Range x Measure rows, months across (needs unpivoting).
+SP_ProductMapping.xlsx  part 03 copy of the mapping 'from SharePoint', adding RangeDefault for the budget join.
 Usage: python manual.py [data folder]   (run after dims.py and sales.py)
 """
 import csv, os, sys, random
@@ -99,6 +100,28 @@ sheet(ws2, ["Range", "SortOrder", "Description"],
 wb.save(os.path.join(OUT, "Manual/ProductMapping.xlsx"))
 pr_rows = map_rows
 
+# Part 03 version, simulating the SharePoint extract: adds RangeDefault, one best-selling item per range,
+# so the range-level budget can join the item-level product dimension (same idea as VarietyDefault)
+range_default = {}
+for r in map_rows:
+    ic, rng = r[0], r[4]
+    if rng not in range_default or sold[ic] > sold[range_default[rng]]:
+        range_default[rng] = ic
+sp_rows = [r[:5] + ["Y" if range_default[r[4]] == r[0] else ""] + r[5:] for r in map_rows]
+wb = Workbook()
+ws = wb.active
+ws.title = "Mapping"
+sheet(ws, ["ItemCode", "ItemDescription", "VarietyCode", "VarietyDefault", "Range", "RangeDefault", "MappedBy",
+           "MappedDate"], sp_rows, [12, 36, 12, 14, 12, 14, 12, 12])
+for r in ws.iter_rows(min_row=2, min_col=8, max_col=8):
+    r[0].number_format = "dd/mm/yyyy"
+ws2 = wb.create_sheet("Range List")
+sheet(ws2, ["Range", "SortOrder", "Description"],
+      [["Premium", 1, "Long stem grades for florists and export"],
+       ["Everyday", 2, "Shorter grades for supermarkets and volume buyers"],
+       ["Seasonal", 3, "Gift and mixed items for peak occasions"]], [12, 10, 50])
+wb.save(os.path.join(OUT, "Manual/SP_ProductMapping.xlsx"))
+
 # ---------------- Budget ----------------
 # Built from actuals with noise, as if set before each year: bunches and revenue by Range x Channel x month.
 act = defaultdict(lambda: [0, 0.0])
@@ -122,6 +145,7 @@ for fy, y0 in FY.items():
     mnames = [date(y0 + off, m, 1).strftime("%b-%y") for m, off in months]
     rows = []
     for rng in ["Premium", "Everyday", "Seasonal"]:
+        tb, tr = [0] * 12, [0] * 12  # budget is set by range; channel figures are summed
         for ch in ["Florist", "Wholesaler", "Supermarket", "Export", "Online"]:
             bunches, revenue = [], []
             for m, off in months:
@@ -129,26 +153,25 @@ for fy, y0 in FY.items():
                 f = bias[fy] * random.uniform(0.9, 1.1)
                 bunches.append(int(round(a[0] * f, -1)))
                 revenue.append(int(round(a[1] * f * random.uniform(0.98, 1.02), -2)))
-            if sum(bunches) == 0:
-                continue
-            rows.append([rng, ch, "Bunches"] + bunches)
-            rows.append([rng, ch, "Revenue NZD"] + revenue)
+            tb = [x + y for x, y in zip(tb, bunches)]
+            tr = [x + y for x, y in zip(tr, revenue)]
+        rows.append([rng, "Bunches"] + tb)
+        rows.append([rng, "Revenue NZD"] + tr)
     ws.append([f"NVX Sales Budget {fy} (Apr {y0} to Mar {y0 + 1})"])
     ws["A1"].font = Font(bold=True, size=13)
     ws.append([f"Approved {date(y0, 3, 20).strftime('%d %b %Y')}"])
     ws.append([])
     hdr_row = 4
-    ws.append(["Range", "Channel", "Measure"] + mnames + ["Total"])
+    ws.append(["Range", "Measure"] + mnames + ["Total"])
     for c in ws[hdr_row]:
         c.font, c.fill = HDR, FILL
     for i, r in enumerate(rows):
         rn = hdr_row + 1 + i
-        ws.append(r + [sum(r[3:])])  # value, not formula: Power Query reads cached values only
-        for c in ws[rn][3:]:
+        ws.append(r + [sum(r[2:])])  # value, not formula: Power Query reads cached values only
+        for c in ws[rn][2:]:
             c.number_format = "#,##0"
     ws.column_dimensions["A"].width = 12
     ws.column_dimensions["B"].width = 13
-    ws.column_dimensions["C"].width = 13
-    ws.freeze_panes = "D5"
+    ws.freeze_panes = "C5"
 wb.save(os.path.join(OUT, "Manual/Budget.xlsx"))
 print("map rows", len(map_rows), "forgotten", forgot, "range rows", len(pr_rows))

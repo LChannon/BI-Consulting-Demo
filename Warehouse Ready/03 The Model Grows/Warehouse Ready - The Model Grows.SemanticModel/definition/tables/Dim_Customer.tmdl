@@ -1,0 +1,91 @@
+/// Customer dimension at ERP customer grain. Key: CustomerCode
+table Dim_Customer
+	lineageTag: abc8fb72-d9e4-436d-a402-2d0208f87cb8
+
+	column CustomerCode
+		dataType: string
+		isKey
+		lineageTag: e9868bf6-bf74-49b3-9208-9f5a3feb2d6f
+		summarizeBy: none
+		sourceColumn: CustomerCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column CustomerName
+		dataType: string
+		lineageTag: 492f569c-ad2a-4387-997f-cbced5d34aaa
+		summarizeBy: none
+		sourceColumn: CustomerName
+
+		annotation SummarizationSetBy = Automatic
+
+	column Channel
+		dataType: string
+		lineageTag: 05d2bb81-e44f-4fb5-afdb-f6e5eb8db604
+		summarizeBy: none
+		sourceColumn: Channel
+
+		annotation SummarizationSetBy = Automatic
+
+	column City
+		dataType: string
+		lineageTag: 7112fadf-7bc7-45b5-850c-2092271e9b39
+		summarizeBy: none
+		sourceColumn: City
+
+		annotation SummarizationSetBy = Automatic
+
+	column Region
+		dataType: string
+		lineageTag: 486b0a1a-097f-41a4-9782-f37ba9b88a26
+		summarizeBy: none
+		sourceColumn: Region
+
+		annotation SummarizationSetBy = Automatic
+
+	column Country
+		dataType: string
+		lineageTag: f930094a-9aa4-4410-83a2-b27c876e0e54
+		summarizeBy: none
+		sourceColumn: Country
+
+		annotation SummarizationSetBy = Automatic
+
+	column PaymentTerms
+		dataType: string
+		lineageTag: 6e7a926e-4d78-48c8-a830-a6ebde993ae4
+		summarizeBy: none
+		sourceColumn: PaymentTerms
+
+		annotation SummarizationSetBy = Automatic
+
+	column CreatedDate
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: fb8aaa7b-7d48-40e1-96f5-5ece96cd6452
+		summarizeBy: none
+		sourceColumn: CreatedDate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Active
+		dataType: string
+		lineageTag: d5748828-19b2-4376-b3a2-949c1f6e604c
+		summarizeBy: none
+		sourceColumn: Active
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Customer = m
+		mode: import
+		queryGroup: 'Report Tables'
+		source =
+				let
+				    Source = stg_Customers
+				in
+				    Source
+
+	annotation PBI_ResultType = Table
+

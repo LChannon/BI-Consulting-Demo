@@ -1,0 +1,66 @@
+/// Sales budget spread to day grain. Joined to Dim_Product through each range's default item, so only report it at range level and above
+table Fact_Budget
+	lineageTag: bed0496d-c435-4f41-83e1-a70a0ca40cf8
+
+	column BudgetDate
+		dataType: dateTime
+		isHidden
+		formatString: Short Date
+		lineageTag: da4997c8-970b-4917-a8c5-d2dbaa4ec31c
+		summarizeBy: none
+		sourceColumn: BudgetDate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column ItemCode
+		dataType: string
+		isHidden
+		lineageTag: 4aa8b8b3-c562-4fd4-86c7-a1d47b881d06
+		summarizeBy: none
+		sourceColumn: ItemCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column BudgetBunches
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 733438a5-be2e-4158-93b8-25d0027f0186
+		summarizeBy: sum
+		sourceColumn: BudgetBunches
+
+		annotation SummarizationSetBy = Automatic
+
+	column BudgetSalesNZD
+		dataType: decimal
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: 0e5de373-2c31-4fde-8369-659c4df4184c
+		summarizeBy: sum
+		sourceColumn: BudgetSalesNZD
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Fact_Budget = m
+		mode: import
+		queryGroup: 'Report Tables'
+		source =
+				let
+				    Monthly = stg_Budget,
+				    // The budget is set by range, so it joins the product dimension through each range's default item
+				    Defaults = Table.SelectColumns(Table.SelectRows(stg_ProductMapping, each [RangeDefault] = true), {"Range", "ItemCode"}),
+				    WithItem = Table.NestedJoin(Monthly, {"Range"}, Defaults, {"Range"}, "Def", JoinKind.Inner),
+				    ItemCol = Table.ExpandTableColumn(WithItem, "Def", {"ItemCode"}),
+				    // Spread each monthly figure evenly over the days in that month, so weekly and month-to-date budgets work like any other measure
+				    DaysInMonth = Table.AddColumn(ItemCol, "Days", each Date.DaysInMonth([MonthStart]), Int64.Type),
+				    DateList = Table.AddColumn(DaysInMonth, "BudgetDate", each List.Dates([MonthStart], [Days], #duration(1, 0, 0, 0))),
+				    Daily = Table.ExpandListColumn(DateList, "BudgetDate"),
+				    Bunches = Table.AddColumn(Daily, "BudgetBunches", each [Bunches] / [Days], type number),
+				    Sales = Table.AddColumn(Bunches, "BudgetSalesNZD", each [RevenueNZD] / [Days], Currency.Type),
+				    Selected = Table.SelectColumns(Sales, {"BudgetDate", "ItemCode", "BudgetBunches", "BudgetSalesNZD"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"BudgetDate", type date}, {"ItemCode", type text}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table
+

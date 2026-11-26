@@ -1,0 +1,258 @@
+/// Holds all report measures. The column is hidden and has no data
+table _Measures
+	lineageTag: f1eecdeb-a962-41d3-9b4b-a342dc90b3ff
+
+	/// Bunches on invoiced orders. Cancelled orders are excluded
+	measure 'Bunches Sold' = CALCULATE ( SUM ( Fact_Sales[QuantityBunches] ), KEEPFILTERS ( Fact_Sales[OrderStatus] = "Invoiced" ) )
+		formatString: #,0
+		displayFolder: Sales
+		lineageTag: 6e957267-fed3-448c-bc26-1c5fb704882c
+
+	/// Invoiced sales value in NZD, after discount
+	measure 'Sales $' = CALCULATE ( SUM ( Fact_Sales[LineAmountNZD] ), KEEPFILTERS ( Fact_Sales[OrderStatus] = "Invoiced" ) )
+		formatString: \$#,0;(\$#,0);\$#,0
+		displayFolder: Sales
+		lineageTag: 07c00b31-26f9-4b5e-909e-0e7a85b1b79a
+
+	/// Average invoiced value per bunch
+	measure '$ per Bunch' = DIVIDE ( [Sales $], [Bunches Sold] )
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		displayFolder: Sales
+		lineageTag: e5d5df94-470f-4d22-a7bf-aad48f21ba6b
+
+	/// Stems picked. Report at variety level and above
+	measure 'Stems Picked' = SUM ( Fact_Harvest[StemsPicked] )
+		formatString: #,0
+		displayFolder: Production
+		lineageTag: e63f1cf1-7788-4c09-9a81-9b83b5179dc0
+
+	/// Hours spent picking
+	measure 'Harvest Hours' = SUM ( Fact_Harvest[HarvestHours] )
+		formatString: #,0.0
+		displayFolder: Production
+		lineageTag: 7dc53ff2-3e8c-4dac-8d1c-20efe8590a68
+
+	/// Picking productivity
+	measure 'Stems per Hour' = DIVIDE ( [Stems Picked], [Harvest Hours] )
+		formatString: #,0
+		displayFolder: Production
+		lineageTag: af9d0320-901b-4eca-91ad-447c0a70b441
+
+	/// Bunches packed
+	measure 'Bunches Packed' = SUM ( Fact_PackOut[BunchesPacked] )
+		formatString: #,0
+		displayFolder: Production
+		lineageTag: 0da8591b-3b84-40af-affe-22ee8100318a
+
+	/// Stems in packed bunches
+	measure 'Stems Packed' = SUM ( Fact_PackOut[StemsPacked] )
+		formatString: #,0
+		displayFolder: Production
+		lineageTag: 189dcd74-81ff-44f8-8ae4-baffe3399239
+
+	/// Stems graded out at packing
+	measure 'Stems Rejected' = SUM ( Fact_PackOut[StemsRejected] )
+		formatString: #,0
+		displayFolder: Production
+		lineageTag: d002fe10-23f4-40a1-8061-9c37e4ec2058
+
+	/// Rejected stems as a share of all stems through the pack line
+	measure 'Reject %' = DIVIDE ( [Stems Rejected], [Stems Packed] + [Stems Rejected] )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Production
+		lineageTag: a6a601e2-6621-46b4-9a7d-562c6ba202d9
+
+	/// Bunches packed less bunches sold
+	measure 'Packed vs Sold' = [Bunches Packed] - [Bunches Sold]
+		formatString: #,0;-#,0;0
+		displayFolder: Packed vs Sold
+		lineageTag: 3c020f4e-91d4-4f5d-8e3d-6782aa10f393
+
+	/// Packed vs sold as a share of bunches sold
+	measure 'Packed vs Sold %' = DIVIDE ( [Packed vs Sold], [Bunches Sold] )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Packed vs Sold
+		lineageTag: 1e6de4a2-36c4-4067-93c8-9d9e6d6d0bb4
+
+	/// Bunches sold from the start of the month to the last selected date
+	measure 'Bunches Sold MTD' = CALCULATE ( [Bunches Sold], DATESMTD ( Dim_Date[Date] ) )
+		formatString: #,0
+		displayFolder: Month to Date
+		lineageTag: e3e16b8a-386e-4646-a5a2-93b1bdd775fd
+
+	/// Invoiced sales from the start of the month to the last selected date
+	measure 'Sales $ MTD' = CALCULATE ( [Sales $], DATESMTD ( Dim_Date[Date] ) )
+		formatString: \$#,0;(\$#,0);\$#,0
+		displayFolder: Month to Date
+		lineageTag: 36e79fd6-946c-44b3-8f04-5ecd620d0351
+
+	/// Average value per bunch, month to date
+	measure '$ per Bunch MTD' = DIVIDE ( [Sales $ MTD], [Bunches Sold MTD] )
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		displayFolder: Month to Date
+		lineageTag: 6ebec78f-45d9-427d-8107-82826667ac8a
+
+	/// Stems picked, month to date
+	measure 'Stems Picked MTD' = CALCULATE ( [Stems Picked], DATESMTD ( Dim_Date[Date] ) )
+		formatString: #,0
+		displayFolder: Month to Date
+		lineageTag: d3d9c358-41a4-4fce-897d-49778e07479e
+
+	/// Harvest hours, month to date
+	measure 'Harvest Hours MTD' = CALCULATE ( [Harvest Hours], DATESMTD ( Dim_Date[Date] ) )
+		formatString: #,0.0
+		displayFolder: Month to Date
+		lineageTag: 7a9f4513-bea2-4e23-80c8-929a8598de91
+
+	/// Picking productivity, month to date
+	measure 'Stems per Hour MTD' = DIVIDE ( [Stems Picked MTD], [Harvest Hours MTD] )
+		formatString: #,0
+		displayFolder: Month to Date
+		lineageTag: acf63f3b-dbba-4763-8c75-de348729bab4
+
+	/// Bunches packed, month to date
+	measure 'Bunches Packed MTD' = CALCULATE ( [Bunches Packed], DATESMTD ( Dim_Date[Date] ) )
+		formatString: #,0
+		displayFolder: Month to Date
+		lineageTag: 38961aff-643e-4a42-a3da-aba76c06e315
+
+	/// Stems in packed bunches, month to date
+	measure 'Stems Packed MTD' = CALCULATE ( [Stems Packed], DATESMTD ( Dim_Date[Date] ) )
+		formatString: #,0
+		displayFolder: Month to Date
+		lineageTag: fd84e911-b2b9-4a04-8ce2-e0e20257fb98
+
+	/// Stems graded out at packing, month to date
+	measure 'Stems Rejected MTD' = CALCULATE ( [Stems Rejected], DATESMTD ( Dim_Date[Date] ) )
+		formatString: #,0
+		displayFolder: Month to Date
+		lineageTag: 9c1cb387-f453-4534-9789-1abfd9e5f356
+
+	/// Reject %, month to date
+	measure 'Reject % MTD' = DIVIDE ( [Stems Rejected MTD], [Stems Packed MTD] + [Stems Rejected MTD] )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Month to Date
+		lineageTag: 97ebddee-9d8b-452a-9d7b-e78cb34db239
+
+	/// Budgeted bunches. Set by range, so report at range level and above
+	measure 'Budget Bunches' = SUM ( Fact_Budget[BudgetBunches] )
+		formatString: #,0
+		displayFolder: Budget
+		lineageTag: 877ca082-8c38-41e0-b83a-3c612cdb3920
+
+	/// Budgeted sales in NZD. Set by range, so report at range level and above
+	measure 'Budget Sales $' = SUM ( Fact_Budget[BudgetSalesNZD] )
+		formatString: \$#,0;(\$#,0);\$#,0
+		displayFolder: Budget
+		lineageTag: 650d27e6-cafa-4fb3-a9a4-eb768a7c6603
+
+	/// Budgeted value per bunch
+	measure 'Budget $ per Bunch' = DIVIDE ( [Budget Sales $], [Budget Bunches] )
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		displayFolder: Budget
+		lineageTag: 04f7c1fc-44e6-4648-a4e1-396746126122
+
+	/// Bunches sold as a share of budget
+	measure 'Bunches % of Budget' = DIVIDE ( [Bunches Sold], [Budget Bunches] )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Budget
+		lineageTag: 917414fc-2bc8-4fa2-8521-c78c85019d5f
+
+	/// Sales as a share of budget
+	measure 'Sales % of Budget' = DIVIDE ( [Sales $], [Budget Sales $] )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Budget
+		lineageTag: c132229d-6880-408b-bb12-d06b14980a93
+
+	/// Budgeted bunches, month to date
+	measure 'Budget Bunches MTD' = CALCULATE ( [Budget Bunches], DATESMTD ( Dim_Date[Date] ) )
+		formatString: #,0
+		displayFolder: Month to Date
+		lineageTag: 1d00962d-d277-491b-bb30-fc0587da984a
+
+	/// Budgeted sales, month to date
+	measure 'Budget Sales $ MTD' = CALCULATE ( [Budget Sales $], DATESMTD ( Dim_Date[Date] ) )
+		formatString: \$#,0;(\$#,0);\$#,0
+		displayFolder: Month to Date
+		lineageTag: 8cac0480-48ea-4475-949b-b56e739b6390
+
+	/// Budgeted value per bunch, month to date
+	measure 'Budget $ per Bunch MTD' = DIVIDE ( [Budget Sales $ MTD], [Budget Bunches MTD] )
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		displayFolder: Month to Date
+		lineageTag: 5aef1df0-19d6-452a-8b0a-0859df2c81d3
+
+	/// Bunches sold as a share of budget, month to date
+	measure 'Bunches % of Budget MTD' = DIVIDE ( [Bunches Sold MTD], [Budget Bunches MTD] )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Month to Date
+		lineageTag: 70913fd0-5202-4e69-abbd-6898a6ef73f9
+
+	/// Sales as a share of budget, month to date
+	measure 'Sales % of Budget MTD' = DIVIDE ( [Sales $ MTD], [Budget Sales $ MTD] )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Month to Date
+		lineageTag: 5f5fdc38-dc1f-4e45-b475-8862e78a9fdf
+
+	/// Gas used in GJ
+	measure 'Gas GJ' = CALCULATE ( SUM ( Fact_Energy[Usage] ), KEEPFILTERS ( Fact_Energy[Fuel] = "Gas" ) )
+		formatString: #,0.0
+		displayFolder: Energy
+		lineageTag: d043c835-bf5e-4fb3-b3df-7f2209597a9f
+
+	/// Electricity used in kWh
+	measure 'Electricity kWh' = CALCULATE ( SUM ( Fact_Energy[Usage] ), KEEPFILTERS ( Fact_Energy[Fuel] = "Electricity" ) )
+		formatString: #,0
+		displayFolder: Energy
+		lineageTag: 255cacba-ae25-444d-a507-11ef7279be2b
+
+	/// Gas and electricity cost at the tariff in force each day
+	measure 'Energy Cost $' = SUM ( Fact_Energy[EnergyCostNZD] )
+		formatString: \$#,0;(\$#,0);\$#,0
+		displayFolder: Energy
+		lineageTag: 6eb04ebc-7ed4-429c-9eb5-e777030221e0
+
+	/// Energy cost per stem picked. Energy is by greenhouse, so use it by greenhouse or in total, not by product
+	measure 'Energy Cost per Stem' = DIVIDE ( [Energy Cost $], [Stems Picked] )
+		formatString: \$#,0.0000;(\$#,0.0000);\$#,0.0000
+		displayFolder: Energy
+		lineageTag: 1621cb06-4338-466b-96d9-c8e26c522577
+
+	/// Energy cost per bunch packed. Energy is by greenhouse, so use it in total, not by product
+	measure 'Energy Cost per Bunch' = DIVIDE ( [Energy Cost $], [Bunches Packed] )
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		displayFolder: Energy
+		lineageTag: ae653f77-4647-4898-a861-c74586268a7f
+
+	/// Energy cost, month to date
+	measure 'Energy Cost $ MTD' = CALCULATE ( [Energy Cost $], DATESMTD ( Dim_Date[Date] ) )
+		formatString: \$#,0;(\$#,0);\$#,0
+		displayFolder: Month to Date
+		lineageTag: 3902691e-0f82-47e1-8fd8-2e2592e9cb13
+
+	/// Energy cost per stem picked, month to date
+	measure 'Energy Cost per Stem MTD' = DIVIDE ( [Energy Cost $ MTD], [Stems Picked MTD] )
+		formatString: \$#,0.0000;(\$#,0.0000);\$#,0.0000
+		displayFolder: Month to Date
+		lineageTag: c1025fbb-f774-41c1-99d8-f4d58449264a
+
+	column Measures
+		dataType: string
+		isHidden
+		lineageTag: 74207d34-f72c-44e5-8979-8597f8dfb669
+		summarizeBy: none
+		sourceColumn: Measures
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _Measures = m
+		mode: import
+		queryGroup: 'Report Tables'
+		source =
+				let
+				    Source = #table(type table [Measures = text], {})
+				in
+				    Source
+
+	annotation PBI_ResultType = Table
+

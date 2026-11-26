@@ -1,0 +1,101 @@
+/// Energy fact at meter and day grain, costed at the tariff in force each day. Relates to Dim_Greenhouse and Dim_Date only
+table Fact_Energy
+	lineageTag: 18e6dd7d-bc1c-4375-9111-fa28ab764183
+
+	column ReadingDate
+		dataType: dateTime
+		isHidden
+		formatString: Short Date
+		lineageTag: da282945-2809-4c9b-882d-9e2f35da4b54
+		summarizeBy: none
+		sourceColumn: ReadingDate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column GreenhouseCode
+		dataType: string
+		isHidden
+		lineageTag: af986aab-f88a-4dc7-8f94-e91d4171d1e5
+		summarizeBy: none
+		sourceColumn: GreenhouseCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column MeterID
+		dataType: string
+		lineageTag: f9782c55-e364-4057-b167-109aca892ce7
+		summarizeBy: none
+		sourceColumn: MeterID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Fuel
+		dataType: string
+		lineageTag: 99f68547-3104-4ec1-a138-fa0a93dce875
+		summarizeBy: none
+		sourceColumn: Fuel
+
+		annotation SummarizationSetBy = Automatic
+
+	column Unit
+		dataType: string
+		lineageTag: a899351c-4a82-42de-afbf-02ebfa576e50
+		summarizeBy: none
+		sourceColumn: Unit
+
+		annotation SummarizationSetBy = Automatic
+
+	column Usage
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 5fe0353a-d681-4601-b5fd-22bae76a85d1
+		summarizeBy: sum
+		sourceColumn: Usage
+
+		annotation SummarizationSetBy = Automatic
+
+	column RatePerUnitNZD
+		dataType: decimal
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: 984a0426-bc1c-4bfb-8515-d6deced8920e
+		summarizeBy: none
+		sourceColumn: RatePerUnitNZD
+
+		annotation SummarizationSetBy = Automatic
+
+	column EnergyCostNZD
+		dataType: decimal
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: 0d161deb-e313-42e2-b7de-d008825ddc96
+		summarizeBy: sum
+		sourceColumn: EnergyCostNZD
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Fact_Energy = m
+		mode: import
+		queryGroup: 'Report Tables'
+		source =
+				let
+				    Usage = stg_MeterUsage,
+				    // Buffered so the tariff lookup below doesn't re-read the workbook for every row
+				    Tariffs = Table.Buffer(stg_EnergyTariffs),
+				    // The energy system numbers its own meters; the meter list says which greenhouse and fuel each one measures
+				    WithMeter = Table.NestedJoin(Usage, {"MeterID"}, stg_Meters, {"MeterID"}, "Mtr", JoinKind.LeftOuter),
+				    MeterCols = Table.ExpandTableColumn(WithMeter, "Mtr", {"GreenhouseCode", "Fuel", "Unit"}),
+				    // Each day is costed at the tariff in force on that day: the latest rate for the fuel with EffectiveFrom on or before the reading
+				    WithRate = Table.AddColumn(MeterCols, "RatePerUnitNZD", (r) =>
+				        let
+				            InForce = Table.SelectRows(Tariffs, (t) => t[Fuel] = r[Fuel] and t[EffectiveFrom] <= r[ReadingDate])
+				        in
+				            if Table.IsEmpty(InForce) then null else Table.Max(InForce, "EffectiveFrom")[RatePerUnitNZD], Currency.Type),
+				    Cost = Table.AddColumn(WithRate, "EnergyCostNZD", each [Usage] * [RatePerUnitNZD], Currency.Type),
+				    Selected = Table.SelectColumns(Cost, {"ReadingDate", "GreenhouseCode", "MeterID", "Fuel", "Unit", "Usage", "RatePerUnitNZD", "EnergyCostNZD"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"GreenhouseCode", type text}, {"Fuel", type text}, {"Unit", type text}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table
+

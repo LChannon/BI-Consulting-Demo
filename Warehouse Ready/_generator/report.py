@@ -133,7 +133,7 @@ for c in bud[4]:
 month_b = defaultdict(float)
 for row in bud.iter_rows(min_row=5, values_only=True):
     if row[0]:
-        month_b[(row[0], row[2])] += row[mcol - 1] or 0
+        month_b[(row[0], row[1])] += row[mcol - 1] or 0
 days_in_month = 28
 def typed(v, days, rnd):
     return int(round(v * days / days_in_month, rnd))

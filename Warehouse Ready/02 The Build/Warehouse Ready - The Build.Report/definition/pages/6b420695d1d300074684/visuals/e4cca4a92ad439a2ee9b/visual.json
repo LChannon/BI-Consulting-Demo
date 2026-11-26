@@ -3,10 +3,10 @@
   "name": "e4cca4a92ad439a2ee9b",
   "position": {
     "x": 300.59113300492612,
-    "y": 12.413793103448276,
+    "y": 11.970443349753694,
     "z": 2000,
-    "height": 120.59113300492611,
-    "width": 649.95073891625611,
+    "height": 121.03448275862068,
+    "width": 980.2463054187192,
     "tabOrder": 3000
   },
   "visual": {
@@ -19,7 +19,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "The Anchor Pattern (Sequel)",
+                    "value": "Warehouse Ready - The Build",
                     "textStyle": {
                       "fontSize": "36pt",
                       "color": "#ffffff"
@@ -31,7 +31,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "Using UDF's",
+                    "value": "Weekly Reporting Page",
                     "textStyle": {
                       "fontSize": "28pt",
                       "color": "#ffffff"

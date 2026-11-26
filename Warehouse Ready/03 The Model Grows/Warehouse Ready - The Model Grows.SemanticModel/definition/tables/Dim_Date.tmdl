@@ -1,0 +1,409 @@
+table Dim_Date
+	lineageTag: 2e2c5f8d-aaa5-4e85-894d-9a73aaceab43
+	dataCategory: Time
+
+	column Date
+		dataType: dateTime
+		isKey
+		formatString: Short Date
+		lineageTag: 16bfe5e0-70d9-4197-ac8b-37e1f63047ee
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column DateCode
+		dataType: int64
+		formatString: 0
+		lineageTag: 3cc736d8-e4b3-467f-8de1-bbd22247a6a5
+		summarizeBy: count
+		sourceColumn: DateCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year
+		dataType: string
+		lineageTag: 7b1c73ec-0748-4780-bc74-92181e760b01
+		summarizeBy: none
+		sourceColumn: Year
+
+		annotation SummarizationSetBy = Automatic
+
+	column YearNo
+		dataType: int64
+		formatString: 0
+		lineageTag: 904bfdb8-ee35-44f7-a27e-6b44abe5177a
+		summarizeBy: sum
+		sourceColumn: YearNo
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthOfYearNo
+		dataType: int64
+		formatString: 0
+		lineageTag: f21081df-536d-45df-a1b2-367fce531c97
+		summarizeBy: sum
+		sourceColumn: MonthOfYearNo
+
+		annotation SummarizationSetBy = Automatic
+
+	column FYear
+		dataType: string
+		lineageTag: d8fa5b9f-0bac-4bb5-8406-daedc67a1891
+		summarizeBy: none
+		sourceColumn: FYear
+
+		annotation SummarizationSetBy = Automatic
+
+	column FinMonthOfYearNo
+		dataType: int64
+		formatString: 0
+		lineageTag: ff7ee3e4-d909-4665-ba2a-74e2d406eb67
+		summarizeBy: sum
+		sourceColumn: FinMonthOfYearNo
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthOfYear
+		dataType: string
+		lineageTag: 9fcfb91b-0e5d-4a8a-891d-6c17eac9c9e6
+		summarizeBy: none
+		sourceColumn: MonthOfYear
+		sortByColumn: FinMonthOfYearNo
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthOfYearShort
+		dataType: string
+		lineageTag: 118c7611-157e-495c-a07f-0862565ce26d
+		summarizeBy: none
+		sourceColumn: MonthOfYearShort
+		sortByColumn: FinMonthOfYearNo
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthNo
+		dataType: int64
+		formatString: 0
+		lineageTag: 4cd01ee9-bb87-4947-93dc-96a46f5f571c
+		summarizeBy: sum
+		sourceColumn: MonthNo
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month
+		dataType: string
+		lineageTag: 98c0f4fc-0030-4b81-870c-8518714e32e2
+		summarizeBy: none
+		sourceColumn: Month
+		sortByColumn: MonthNo
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthShort
+		dataType: string
+		lineageTag: 880f459b-b83c-42d0-bfa8-f52e599408bb
+		summarizeBy: none
+		sourceColumn: MonthShort
+		sortByColumn: MonthNo
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column WeekOfYear
+		dataType: string
+		lineageTag: 55d68d9b-f948-4df2-9869-66d40c8a9d16
+		summarizeBy: none
+		sourceColumn: WeekOfYear
+
+		annotation SummarizationSetBy = Automatic
+
+	column WeekOfMonth
+		dataType: string
+		lineageTag: 3dd2f8fa-0480-45e8-a258-7f94c0301149
+		summarizeBy: none
+		sourceColumn: WeekOfMonth
+
+		annotation SummarizationSetBy = Automatic
+
+	column WeekNo
+		dataType: int64
+		formatString: 0
+		lineageTag: 89ed7999-8fd6-4f1c-8a0a-4b4da8e191c9
+		summarizeBy: sum
+		sourceColumn: WeekNo
+
+		annotation SummarizationSetBy = Automatic
+
+	column Week
+		dataType: string
+		lineageTag: eb255d69-19ec-42d0-bfbb-9b7798139ad2
+		summarizeBy: none
+		sourceColumn: Week
+		sortByColumn: WeekNo
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column FYearNo
+		dataType: int64
+		formatString: 0
+		lineageTag: 315a6f09-55b4-45e0-bdb1-6cb5ecb42f1c
+		summarizeBy: sum
+		sourceColumn: FYearNo
+
+		annotation SummarizationSetBy = Automatic
+
+	column FYearName
+		dataType: string
+		lineageTag: b4d8a07e-362e-41c5-be27-ee1d1f8b9c65
+		summarizeBy: none
+		sourceColumn: FYearName
+		sortByColumn: FYearNo
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column DateFormat
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: e468ce2b-0093-4446-b8e7-8a97ddab927c
+		summarizeBy: none
+		sourceColumn: DateFormat
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column EOW_Date
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: ee14267a-96a6-407b-894b-ea66188e5784
+		summarizeBy: none
+		sourceColumn: EOW_Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column EOM_Date
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 4c102ff1-5d5d-4ce4-9e01-6ce93ecaaa80
+		summarizeBy: none
+		sourceColumn: EOM_Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column DayOfYear
+		dataType: string
+		lineageTag: f7fe2b1f-db02-432f-9e11-0bbf69c37857
+		summarizeBy: none
+		sourceColumn: DayOfYear
+
+		annotation SummarizationSetBy = Automatic
+
+	column DayOfWeekNo
+		dataType: int64
+		formatString: 0
+		lineageTag: 16f50f98-de1d-4c4a-91e2-fa0707c41350
+		summarizeBy: sum
+		sourceColumn: DayOfWeekNo
+
+		annotation SummarizationSetBy = Automatic
+
+	column DayOfMonthNo
+		dataType: int64
+		formatString: 0
+		lineageTag: 30f2e0a6-a620-4bb7-ac04-846de42acfe8
+		summarizeBy: sum
+		sourceColumn: DayOfMonthNo
+
+		annotation SummarizationSetBy = Automatic
+
+	column DayType
+		dataType: string
+		lineageTag: 2992232a-ea30-47a3-8318-ecff310fb6df
+		summarizeBy: none
+		sourceColumn: DayType
+
+		annotation SummarizationSetBy = Automatic
+
+	column Day
+		dataType: string
+		lineageTag: 27c8a136-1651-4cd4-a364-7e2bfc95783a
+		summarizeBy: none
+		sourceColumn: Day
+		sortByColumn: DayOfWeekNo
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column DayShort
+		dataType: string
+		lineageTag: f79b01ab-cb7d-4a20-a575-2dcc27c7db87
+		summarizeBy: none
+		sourceColumn: DayShort
+		sortByColumn: DayOfWeekNo
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column DayFilter
+		dataType: string
+		lineageTag: d479c367-942d-48d0-ab9e-5a73a57deb73
+		summarizeBy: none
+		sourceColumn: DayFilter
+
+		annotation SummarizationSetBy = Automatic
+
+	column WeekFilter
+		dataType: string
+		lineageTag: 8bf013df-c27c-404d-9eb5-d65fc830006f
+		summarizeBy: none
+		sourceColumn: WeekFilter
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthFilter
+		dataType: string
+		lineageTag: e58100ff-eed4-48c9-970d-feff23ed3e3b
+		summarizeBy: none
+		sourceColumn: MonthFilter
+
+		annotation SummarizationSetBy = Automatic
+
+	column YearFilter
+		dataType: string
+		lineageTag: b3b25152-8928-40f2-8476-02947af816f9
+		summarizeBy: none
+		sourceColumn: YearFilter
+
+		annotation SummarizationSetBy = Automatic
+
+	column FYearFilter
+		dataType: string
+		lineageTag: 6c5490e8-6efc-49ee-be4e-eed512101781
+		summarizeBy: none
+		sourceColumn: FYearFilter
+
+		annotation SummarizationSetBy = Automatic
+
+	column YearsBack
+		dataType: int64
+		formatString: 0
+		lineageTag: 34f48ee1-e877-4b29-9c32-5f52f7182755
+		summarizeBy: sum
+		sourceColumn: YearsBack
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthsBack
+		dataType: int64
+		formatString: 0
+		lineageTag: 5e5bfd3f-d0cf-4960-922e-1240dfab4a2c
+		summarizeBy: sum
+		sourceColumn: MonthsBack
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Date = m
+		mode: import
+		queryGroup: 'Report Tables'
+		source = ```
+				let
+				    //Pick up dates from existing tables
+				    YearCount = Duration.Days(Duration.From(Date.From(Text.From(End_Year)&"-12-31")-Date.From(Text.From(Start_Year)&"-01-01")))+1,
+				    ListDays = List.Dates(Date.From(Text.From(Start_Year)&"-01-01"),YearCount,#duration(1,0,0,0)),
+				    ToTable = Table.FromList(ListDays, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
+				    RenCols = Table.RenameColumns(ToTable,{{"Column1", "Date"}}),
+				    ChgType = Table.TransformColumnTypes(RenCols,{{"Date", type date}}),
+				
+				    //Create date related fields for use in reporting
+				    DateCode = Table.AddColumn(ChgType, "DateCode", each Date.Year([Date])*10000+Date.Month([Date])*100+Date.Day([Date]), Int64.Type),
+				    Year = Table.AddColumn(DateCode, "Year", each Date.Year([Date]), type any),
+				    YearNo = Table.AddColumn(Year, "YearNo", each Date.Year([Date]), Int64.Type),
+				    FYSM = Table.AddColumn(YearNo, "FYSM", each FinYearStart),
+				    MonthOfYearNo = Table.AddColumn(FYSM, "MonthOfYearNo", each Date.Month([Date]), Int64.Type),
+				    FYear = Table.AddColumn(MonthOfYearNo, "FYear", each if [MonthOfYearNo] >= [FYSM] then [YearNo]+1 else [YearNo], type any),
+				    FinMonthOfYearNo = Table.AddColumn(FYear, "FinMonthOfYearNo", each if [MonthOfYearNo] < [FYSM] then 12 - [FYSM] + [MonthOfYearNo] + 1 else [MonthOfYearNo] - [FYSM] + 1, Int64.Type),
+				    MonthOfYear = Table.AddColumn(FinMonthOfYearNo, "MonthOfYear", each Date.MonthName([Date]), type text),
+				    MonthOfYearShort = Table.AddColumn(MonthOfYear, "MonthOfYearShort", each Text.Range(Date.MonthName([Date]),0,3), type text),
+				    MonthNo = Table.AddColumn(MonthOfYearShort, "MonthNo", each [FYear] * 100 + [FinMonthOfYearNo], Int64.Type),
+				    Month = Table.AddColumn(MonthNo, "Month", each Date.MonthName([Date]) & " " & Text.From(Date.Year([Date])), type text),
+				    MonthShort = Table.AddColumn(Month, "MonthShort", each Text.Range(Date.MonthName([Date]),0,3) &" "& Text.From(Date.Year([Date])), type text),
+				    WeekOfYear = Table.AddColumn(MonthShort, "WeekOfYear", each Date.WeekOfYear([Date],Day.Monday), type any),
+				    WeekOfMonth = Table.AddColumn(WeekOfYear, "WeekOfMonth", each Date.WeekOfMonth([Date]), type any),
+				    WeekNo = Table.AddColumn(WeekOfMonth, "WeekNo", each Date.Year([Date])*100+Date.WeekOfYear([Date],Day.Monday), Int64.Type),
+				    Week = Table.AddColumn(WeekNo, "Week", each "W" & Text.From(Date.WeekOfYear([Date],Day.Monday)) & " " & Text.From(Date.Year([Date])), type text),
+				    
+				    FYearNo = Table.AddColumn(Week, "FYearNo", each [FYear], Int64.Type),
+				    FYearName = Table.AddColumn(FYearNo, "FYearName", each "FY " & Number.ToText([FYearNo]-1) & "/" & Text.Range(Number.ToText([FYear]),2), type text),
+				
+				    DateFormat = Table.AddColumn(FYearName, "DateFormat", each Date.From([Date]), type date),
+				    EOW_Date = Table.AddColumn(DateFormat, "EOW_Date", each Date.EndOfWeek([Date],Day.Monday), type date),
+				    EOM_Date = Table.AddColumn(EOW_Date, "EOM_Date", each Date.EndOfMonth([Date]), type date),
+				    DayOfYear = Table.AddColumn(EOM_Date, "DayOfYear", each Date.DayOfYear([Date]), type any),
+				    DayOfWeekNo = Table.AddColumn(DayOfYear, "DayOfWeekNo", each Date.DayOfWeek([Date],Day.Monday), Int64.Type),
+				    DayOfMonthNo = Table.AddColumn(DayOfWeekNo, "DayOfMonthNo", each Date.Day([Date]), Int64.Type),
+				    DayType = Table.AddColumn(DayOfMonthNo, "DayType", each if [DayOfWeekNo] < 5 then "WeekDay" else "WeekEnd", type text),
+				    Day = Table.AddColumn(DayType, "Day", each Date.DayOfWeekName([Date]), type text),
+				    DayShort = Table.AddColumn(Day, "DayShort", each Text.Range(Date.DayOfWeekName([Date]),0,3), type text),
+				
+				    //Date Filter Calculations
+				    Today = Table.AddColumn(DayShort, "Today", each if Date.From(DateTimeZone.LocalNow()) = [Date] then 1 else 0),
+				    FilterToday = Table.SelectRows(Today, each ([Today] = 1)),
+				    
+				    LastWeek = Table.AddColumn(DayShort, "LastWeek", each if Date.AddDays(Date.From(DateTimeZone.LocalNow()),-7) = [Date] then 1 else 0),
+				    FilterLastWeek = Table.SelectRows(LastWeek, each ([LastWeek] = 1)),
+				    
+				    NextWeek = Table.AddColumn(DayShort, "NextWeek", each if Date.AddDays(Date.From(DateTimeZone.LocalNow()),7) = [Date] then 1 else 0),
+				    FilterNextWeek = Table.SelectRows(NextWeek, each ([NextWeek] = 1)),
+				    
+				    LastMonth = Table.AddColumn(DayShort, "LastMonth", each if Date.AddMonths(Date.From(DateTimeZone.LocalNow()),-1) = [Date] then 1 else 0),
+				    FilterLastMonth = Table.SelectRows(LastMonth, each ([LastMonth] = 1)),
+				    
+				    NextMonth = Table.AddColumn(DayShort, "NextMonth", each if Date.AddMonths(Date.From(DateTimeZone.LocalNow()),1) = [Date] then 1 else 0),
+				    FilterNextMonth = Table.SelectRows(NextMonth, each ([NextMonth] = 1)),
+				
+				    LastYear = Table.AddColumn(DayShort, "LastYear", each if Date.AddYears(Date.From(DateTimeZone.LocalNow()),-1) = [Date] then 1 else 0),
+				    FilterLastYear = Table.SelectRows(LastYear, each ([LastYear] = 1)),
+				    
+				    NextYear = Table.AddColumn(DayShort, "NextYear", each if Date.AddYears(Date.From(DateTimeZone.LocalNow()),1) = [Date] then 1 else 0),
+				    FilterNextYear = Table.SelectRows(NextYear, each ([NextYear] = 1)),
+				
+				    LastFYear = Table.AddColumn(DayShort, "LastFYear", each if Date.AddYears(Date.From(DateTimeZone.LocalNow()),-1) = [Date] then 1 else 0),
+				    FilterLastFYear = Table.SelectRows(LastFYear, each ([LastFYear] = 1)),
+				    
+				    NextFYear = Table.AddColumn(DayShort, "NextFYear", each if Date.AddYears(Date.From(DateTimeZone.LocalNow()),1) = [Date] then 1 else 0),
+				    FilterNextFYear = Table.SelectRows(NextFYear, each ([NextFYear] = 1)),
+				
+				    DayFilter = Table.AddColumn(DayShort, "DayFilter", each if Date.From(DateTimeZone.LocalNow()) = [Date] then "Today" else if Date.AddDays(Date.From(DateTimeZone.LocalNow()),-1) = [Date] then "Yesterday" else if Date.AddDays(Date.From(DateTimeZone.LocalNow()),1) = [Date] then "Tomorrow" else "", type text),
+				    WeekFilter = Table.AddColumn(DayFilter, "WeekFilter", each if List.Max(#"FilterToday"[WeekNo]) = [WeekNo] then "Current Week" else if List.Max(#"FilterLastWeek"[WeekNo]) = [WeekNo] then "Last Week" else if List.Max(#"FilterNextWeek"[WeekNo]) = [WeekNo] then "Next Week" else "", type text),
+				    MonthFilter = Table.AddColumn(WeekFilter, "MonthFilter", each if List.Max(#"FilterToday"[MonthNo]) = [MonthNo] then "Current Month" else if List.Max(#"FilterLastMonth"[MonthNo]) = [MonthNo] then "Last Month" else if List.Max(#"FilterNextMonth"[MonthNo]) = [MonthNo] then "Next Month" else "", type text),
+				    YearFilter = Table.AddColumn(MonthFilter, "YearFilter", each if List.Max(#"FilterToday"[YearNo]) = [YearNo] then "Current Year" else if List.Max(#"FilterLastYear"[YearNo]) = [YearNo] then "Last Year" else if List.Max(#"FilterNextYear"[YearNo]) = [YearNo] then "Next Year" else "", type text),
+				    FYearFilter = Table.AddColumn(YearFilter, "FYearFilter", each if List.Max(#"FilterToday"[FYearNo]) = [FYearNo] then "Current Fin Year" else if List.Max(#"FilterLastFYear"[FYearNo]) = [FYearNo] then "Last Fin Year" else if List.Max(#"FilterNextFYear"[FYearNo]) = [FYearNo] then "Next Fin Year" else "", type text),
+				    YearsBack = Table.AddColumn(FYearFilter, "YearsBack", each [FYearNo] - List.Max(#"FilterToday"[FYearNo]), Int64.Type),
+				    MonthsBack = Table.AddColumn(YearsBack, "MonthsBack", each (-([FYear] - List.Max(#"FilterToday"[FYearNo])) * 100) + ([MonthNo] - List.Max(#"FilterToday"[MonthNo])) - (- ([FYear] - List.Max(#"FilterToday"[FYearNo])) * 12), Int64.Type),
+				    RemovedColumns = Table.RemoveColumns(MonthsBack,{"FYSM"})
+				in
+				    RemovedColumns
+				```
+
+	annotation PBI_ResultType = Table
+
